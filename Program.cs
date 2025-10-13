@@ -1,3 +1,2 @@
-﻿using User
-
-bool running = true;
+﻿// See https://aka.ms/new-console-template for more information
+Console.WriteLine("Hello, World!");
