@@ -37,3 +37,21 @@ class Region
   Console.WriteLine(MyRegion);
   }
 }
+
+
+class Region
+{
+  public string RegionArea;
+  public string Locations;
+  
+  // Create a class constructor with multiple parameters
+  public Region(string RegionArea, string Locations,)
+  {
+    area = RegionArea;
+    location = Location;
+  }
+  {
+    Region= new Region("");
+    Console.WriteLine( + " " + );
+  }
+}
