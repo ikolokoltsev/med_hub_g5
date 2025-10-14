@@ -12,6 +12,10 @@ namespace User
             Username = username;
             Password = password;
         }
+        public bool TryLogin(string username, string password)
+        {
+            return username == Username && password == _password;
+        }
     }
 }
 
