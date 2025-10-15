@@ -1,25 +1,16 @@
-﻿
+﻿using Regions;
 
-using User
+Region skane = new Region(RegionEnum.Skane);
+Region halland = new Region(RegionEnum.Halland);
 
-bool running = true;
+halland.AddLocation("Nyhems vårdcentral");
+halland.AddLocation("Halmstad Akut");
 
-while (running)
-{
-  Console.Clear();
-  Console.WriteLine("1 Login");
-  Console.WriteLine("2. Registration");
-  Console.WriteLine("3. Quit");
-  Console.Write
+skane.AddLocation("Lund Vårdcentral");
+skane.AddLocation("Malmö Sjukhus");
 
-}
+skane.ShowLocations();
+halland.ShowLocations();
 
-
-
-// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
-
-// wtf is this
-
-
-
+Console.WriteLine("\nTryck på valfri tangent för att avsluta...");
+Console.ReadKey();
