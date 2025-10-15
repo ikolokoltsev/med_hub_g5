@@ -40,7 +40,7 @@ public class User
     public int SocialSecurityNumber;
     public string Email;
     public string _password;
-    public string Role;
+    public string Role; // "Admin", "Personnel", "Patient".
 
     public User(string firstName, string lastName, int dateOfBirth, int socialSecurityNumber, string email, string password, string role)
     {
@@ -60,7 +60,7 @@ public class User
 
     public string ToSaveString()
     {
-        return $"{ Email } , { _password }";
+        return $"{FirstName}, {LastName}; {DateOfBirth}; {SocialSecurityNumber}; {Role}; { Email };{ _password }";
     }
     
 }

@@ -2,11 +2,7 @@ namespace App;
 
 enum Menu
 {
+    None,
     Register,
     Login,
-    Logout,
-    Patient,
-    Personnel,
-    Admin,
-
 }
