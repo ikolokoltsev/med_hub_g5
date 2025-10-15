@@ -1,5 +1,14 @@
-﻿
+﻿static class LocationData    // A static class is a class that cannot be created as an object.
+{
 
-using User
+    public static List<Location> AllLocations = new List<Location>    // Create a public static List that stores all available locations
+    {
 
-bool running = true;
+
+        new Location("Halmstad Hospital", Region.Hallands),
+        new Location("Varberg Clinic", Region.Hallands),
+        new Location("Lund Hospital", Region.Skane),
+        new Location("Malmö Clinic", Region.Skane)
+    };
+}
+    
