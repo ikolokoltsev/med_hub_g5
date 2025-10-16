@@ -1,14 +1,14 @@
 
 
-namespace App
+namespace App;
 
-  public enum RegionEnum
+enum RegionEnum
 {
   Skane,
   Halland
 }
 
-public class Location
+class Location
 {
   public string Name;
 
@@ -18,7 +18,7 @@ public class Location
   }
 }
 
-public class Region
+class Region
 {
   public RegionEnum Name;
   public List<Location> Locations;
