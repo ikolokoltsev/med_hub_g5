@@ -1,37 +1,11 @@
-
-/*
-Work to be done
-We need to have a user class with fields:
-
-Full name
-Date of birth
-SSN(optional)
-Email
-_password
-Role
-The Role should be an enum:
-
-Patient
-Personal
-Admin
-The main functionality:
-
-To be able to create a new user with full name, date of birth, email, password.
-To check if the user already exists by email and password.
-Show the list of the users by their role.
-Hard code BIG ADMIN.
-Nice to have
-Registration via SSN.
-Have a menu for login and log out.
-*/
-
-
-
-
-
-
 namespace App;
 
+enum Role
+{
+    Patient,
+    Personnel,
+    Admin,
+}
 public class User
 {
     public string FirstName;
@@ -40,7 +14,7 @@ public class User
     public int SocialSecurityNumber;
     public string Email;
     public string _password;
-    public string Role;
+    public string Role; // "Admin", "Personnel", "Patient".
 
     public User(string firstName, string lastName, int dateOfBirth, int socialSecurityNumber, string email, string password, string role)
     {
@@ -60,9 +34,9 @@ public class User
 
     public string ToSaveString()
     {
-        return $"{ Email } , { _password }";
+        return $"{FirstName}, {LastName}; {DateOfBirth}; {SocialSecurityNumber}; {Role}; {Email};{_password}";
     }
-    
+
 }
 
 
