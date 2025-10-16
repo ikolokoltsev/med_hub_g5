@@ -1,4 +1,5 @@
 namespace App;
+
 enum Region  // This defines "regions" that locations can belong to,
 {
     Hallands,
@@ -21,9 +22,9 @@ class Location    //This represents one healthcare location (like a hospital )
 
 
 
-    
-   
 
 
-  
+
+
+
 

@@ -1,3 +1,4 @@
+
 namespace App;
 
 enum Menu
@@ -5,4 +6,4 @@ enum Menu
     None,
     Register,
     Login,
-}
+
