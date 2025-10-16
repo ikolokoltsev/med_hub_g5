@@ -1,28 +1,19 @@
-﻿static class LocationData    // A static class is a class that cannot be created as an object.
-{
+﻿using App;
 
-    public static List<Location> AllLocations = new List<Location>    // Create a public static List that stores all available locations
+List<Location> locations = new List<Location>();
 
-    {
+locations.Add(new Location("Halmstad Hospital", Region.Hallands));
+locations.Add(new Location("Varberg Clinic", Region.Hallands));
+locations.Add(new Location("Lund Hospital", Region.Skane));
+locations.Add(new Location("Malmö Clinic", Region.Skane));
+Console.WriteLine("=== List of All Locations ===");
+Console.WriteLine();
 
-        new Location("Halmstad Hospital", Region.Hallands),
-        new Location("Varberg Clinic", Region.Hallands),
-        new Location("Lund Hospital", Region.Skane),
-        new Location("Malmö Clinic", Region.Skane)
-    };
-     static void Main(string[] args)
-    {
-        Console.WriteLine("=== List of All Locations ===");
-        Console.WriteLine();
+// Loop through all items in the list and print them
+     foreach (Location location in locations)
+     {
+        Console.WriteLine(location.Name + " - " + location.BelongsToRegion);
+     }
 
-        // Loop through all items in the list and print them
-        foreach (var location in LocationData.AllLocations)
-        {
-           Console.WriteLine(location.Name + " - " + location.BelongsToRegion);
-        }
-
-        Console.WriteLine("\nPress Enter to exit...");
-        Console.ReadLine();
-    }
-}
-    
+     Console.WriteLine("\nPress Enter to exit...");
+     Console.ReadLine();
