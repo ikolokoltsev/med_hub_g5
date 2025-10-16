@@ -1,3 +1,4 @@
+namespace App;
 enum Region  // This defines "regions" that locations can belong to,
 {
     Hallands,
