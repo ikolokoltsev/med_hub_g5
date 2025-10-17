@@ -2,12 +2,24 @@
 using System.Diagnostics;
 using static IOUtilsApp.IOUtils;
 
-
 List<User> users = new();
 users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass"));
 users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass"));
 users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass"));
 users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass"));
+
+List<Region> regions = new List<Region>();
+regions.Add(new Region(RegionEnum.Skane));
+regions.Add(new Region(RegionEnum.Halland));
+
+static void InitiateRegionWithLocations(List<Region> regions, List<Location> locations)
+{
+    foreach (Region region in regions)
+    {
+        List<Location> region_locations = locations.FindAll(location => location.BelongsToRegion == region.Name);
+        region.InitLocations(region_locations);
+    }
+}
 
 List<Location> locations = new List<Location>();
 
@@ -16,6 +28,7 @@ locations.Add(new Location("Varberg Clinic", RegionEnum.Halland.ToString()));
 locations.Add(new Location("Lund Hospital", RegionEnum.Skane.ToString()));
 locations.Add(new Location("Malmö Clinic", RegionEnum.Skane.ToString()));
 
+InitiateRegionWithLocations(regions, locations);
 
 User? active_user = null;
 Menu menu = Menu.None;
@@ -45,10 +58,16 @@ while (running)
             }
             else
             {
-                Console.WriteLine("Logged in");
-                Console.WriteLine("Press any key to exit.");
-                Console.ReadKey();
-                running = false;
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                    case "Add Location":
+                        Console.Clear();
+                        Console.Write("Chose a region: ");
+
+
+                        break;
+                }
             }
         }
             break;
