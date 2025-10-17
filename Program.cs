@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using static IOUtilsApp.IOUtils;
 
-List<User> users = new();
+List<User> users = new List<User>();
 users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass"));
 users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass"));
 users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass"));
