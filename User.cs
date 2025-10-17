@@ -1,7 +1,6 @@
-
 namespace App;
 
-enum Role
+enum RoleEnum
 {
     Patient,
     Personnel,
@@ -15,9 +14,9 @@ public class User
     public int SocialSecurityNumber;
     public string Email;
     public string _password;
-    public string Role; // "Admin", "Personnel", "Patient".
-
-    public User(string firstName, string lastName, int dateOfBirth, int socialSecurityNumber, string email, string password, string role)
+    // public string? UserRole = RoleEnum.Patient.ToString(); // "Admin", "Personnel", "Patient".
+    
+    public User(string firstName, string lastName, int dateOfBirth, int socialSecurityNumber, string email, string password)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -25,7 +24,7 @@ public class User
         SocialSecurityNumber = socialSecurityNumber;
         Email = email;
         _password = password;
-        Role = role;
+        // UserRole = role;
     }
 
     public bool TryLogin(string email, string password)
@@ -35,7 +34,7 @@ public class User
 
     public string ToSaveString()
     {
-        return $"{FirstName}, {LastName}; {DateOfBirth}; {SocialSecurityNumber}; {Role}; {Email};{_password}";
+        return $"{FirstName}, {LastName}; {DateOfBirth}; {SocialSecurityNumber}; {Email};{_password}";
     }
 
 }

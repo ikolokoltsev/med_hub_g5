@@ -6,4 +6,4 @@ enum Menu
     None,
     Register,
     Login,
-
+}
