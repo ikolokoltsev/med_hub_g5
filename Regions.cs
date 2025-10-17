@@ -15,7 +15,6 @@ class Region
     public Region(RegionEnum name)
     {
         Name = name.ToString();
-        Locations = new List<Location>();
     }
 
     public void AddLocation(string locationName)
@@ -23,6 +22,11 @@ class Region
         Location newLocation = new Location(locationName, Name);
         Locations.Add(newLocation);
         Console.WriteLine("Location " + locationName + " has been added to the region " + Name + ".");
+    }
+
+    public void InitLocations(List<Location> locations)
+    {
+        Locations = locations;
     }
 
     public void ShowLocations()
