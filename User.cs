@@ -1,17 +1,22 @@
-namespace User
+namespace App;
+class User
 {
-    // Class for Users
+    public string Username;
+    public string Email;
+    public string Password;
 
-    public class Users
+
+    public User(string username, string password)
     {
-        public string Username;
-        public string Password;
+        Username = username;
+        Email = Email;
+        Password = password;
 
-        public Users(string username, string password)
-        {
-            Username = username;
-            Password = password;
-        }
     }
-}
 
+    public bool TryLogin(string username, string email, string password)
+    {
+        return Email == email && Username == username && Password == password;
+    }
+
+}
