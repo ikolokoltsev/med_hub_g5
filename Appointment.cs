@@ -43,6 +43,11 @@ class AppointmentRequest
     public AppointmentRequestStatusEnum AppointmentRequestStatus;       // Has this request been approved yet?
 
     // Constructor - runs when we create a new appointment request
-    public AppointmentRequest(string patientName, string locationName, DateTime requestedDate);
+    public AppointmentRequest(string patientName, string locationName, string regionName) 
+    {
+        PatientName = patientName;
+        LocationName = locationName;
+        RegionName = regionName;
+    }
 
 }
