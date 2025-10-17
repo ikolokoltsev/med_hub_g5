@@ -5,9 +5,6 @@ enum AppointmentStatusEnum   // Define possible appointment states
     Pending,   // The patient awaits 
     Completed,   // The appointment has happened
     Cancelled    // The appointment was cancelled
-
-
-
 }
 
 enum AppointmentRequestStatusEnum
@@ -29,7 +26,7 @@ class Appointment
         PersonnelName = personnel;
         LocationName = location;
         DateAndTime = dateAndTime;
-        Status = AppointmentStatus.Requested;  // Default when created
+        Status = AppointmentStatusEnum.Pending;  // Default when created
     }
 }
 
