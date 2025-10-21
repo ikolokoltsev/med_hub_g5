@@ -6,10 +6,10 @@ class User
     public string Password;
 
 
-    public User(string username, string password)
+    public User(string username, string email, string password)
     {
         Username = username;
-        Email = Email;
+        Email = email;
         Password = password;
 
     }

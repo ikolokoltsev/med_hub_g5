@@ -1,20 +1,7 @@
 ﻿using App;
+
 List<User> requests = new();
 List<User> users = new List<User>();
-
-
-
-if (File.Exists("UserReg.txt"))
-{
-    foreach (var line in File.ReadAllLines("UserReg.txt"))
-    {
-        string[] parts = line.Split('-');
-        if (parts.Length == 3)
-        {
-            requests.Add(new User(parts[0], parts[1], parts[2]));
-        }
-    }
-}
 
 bool is_running = true;
 
@@ -32,7 +19,7 @@ while (is_running)
             bool EmailTaken = false;
             foreach (User user in users)
             {
-                if (user.Email = email)
+                if (user.Email == email)
                 {
                     EmailTaken = true;
                     break;
@@ -50,7 +37,7 @@ while (is_running)
                 bool UsernameTaken = false;
                 foreach (User user in users)
                 {
-                    if (user.Username = username)
+                    if (user.Username == username)
                     {
                         UsernameTaken = true;
                         break;
