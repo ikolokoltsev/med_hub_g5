@@ -1,6 +1,5 @@
 ﻿using App;
 using System.Diagnostics;
-using static IOUtilsApp.IOUtils;
 
 List<User> users = new List<User>();
 
@@ -11,8 +10,14 @@ users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", R
 users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString()));
 users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString()));
 
+// Events record that new registration happened
+EventLog eventLog = new EventLog();
+
+EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
+
+
 List<Region> regions = new List<Region>();
-regions.Add(new Region(RegionEnum.Skane));
+regions.Add(new Region(RegionEnum.Skane)); 
 regions.Add(new Region(RegionEnum.Halland));
 
 static void InitiateRegionWithLocations(List<Region> regions, List<Location> locations)
@@ -94,6 +99,9 @@ while (running)
                     {
                         active_user = user;
 
+                     //Eventslog to record that user logged in
+                     EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");              
+
                         break;
                     }
                 }
@@ -120,6 +128,11 @@ while (running)
                 Console.Write("Enter regionName: ");
                 string? regionName = Console.ReadLine();
 
+                // Event record that new registration happened
+
+                EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
+               
+               
                 Console.Clear();
                 Debug.Assert(firstName != null);
                 Debug.Assert(lastName != null);
@@ -130,6 +143,7 @@ while (running)
                 Debug.Assert(regionName != null);
 
                 users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName));
+
 
 
                 // TODO: add saving file code here
