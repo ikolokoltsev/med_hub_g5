@@ -2,8 +2,9 @@
 using System.Diagnostics;
 using static IOUtilsApp.IOUtils;
 
-List<User> users = new();
-users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass"));
+List<User> users = new List<User>();
+users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass",
+    PermissionEnum.MenagePermissions | PermissionEnum.ViewPermissionList));
 users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass"));
 users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass"));
 users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass"));
@@ -27,6 +28,8 @@ locations.Add(new Location("Halmstad Hospital", RegionEnum.Halland.ToString()));
 locations.Add(new Location("Varberg Clinic", RegionEnum.Halland.ToString()));
 locations.Add(new Location("Lund Hospital", RegionEnum.Skane.ToString()));
 locations.Add(new Location("Malmö Clinic", RegionEnum.Skane.ToString()));
+
+// Permissions perm = new Permissions("Max", PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions);
 
 InitiateRegionWithLocations(regions, locations);
 
