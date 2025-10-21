@@ -1,12 +1,12 @@
 ﻿using App;
 using System.Diagnostics;
-using static IOUtilsApp.IOUtils;
 
 List<User> users = new List<User>();
 
 users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass", RegionEnum.Halland.ToString(),
-    PermissionEnum.MenagePermissions | PermissionEnum.AssignToTheRegions));
-users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString(), PermissionEnum.ManegeRegistrationRequest | PermissionEnum.AddLocations));
+    PermissionEnum.ManagePermissions | PermissionEnum.AssignToTheRegions));
+users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString(),
+    PermissionEnum.ManegeRegistrationRequest | PermissionEnum.AddLocations));
 
 users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString()));
 users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString()));
@@ -34,173 +34,242 @@ locations.Add(new Location("Malmö Clinic", RegionEnum.Skane.ToString()));
 // Permissions perm = new Permissions("Max", PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions);
 
 InitiateRegionWithLocations(regions, locations);
+//
+// User? active_user = null;
+// Menu menu = Menu.None;
+//
+// bool running = true;
+//
+// while (running)
+// {
+//     Console.Clear();
+//     switch (menu)
+//     {
+//         case Menu.None:
+//         {
+//             if (active_user == null)
+//             {
+//                 Console.WriteLine("1. Register");
+//                 Console.WriteLine("2. Login");
+//                 Console.WriteLine("3. Quit");
+//                 Console.Write("Choose an option: ");
+//
+//                 switch (Console.ReadLine())
+//                 {
+//                     case "1": menu = Menu.Register; break;
+//                     case "2": menu = Menu.Login; break;
+//                     case "3": running = false; break;
+//                 }
+//             }
+//             else
+//             {
+//                 switch (Console.ReadLine())
+//                 {
+//                     case "1":
+//                     case "Add Location":
+//                         Console.Clear();
+//                         Console.Write("Chose a region: ");
+//
+//
+//                         break;
+//                 }
+//             }
+//         }
+//             break;
+//         case Menu.Login:
+//         {
+//             Console.Clear();
+//             Console.Write("Enter email: ");
+//             string? email = Console.ReadLine();
+//             Console.Write("Enter password: ");
+//             string? password = Console.ReadLine();
+//
+//             Console.Clear();
+//             Debug.Assert(email != null);
+//             Debug.Assert(password != null);
+//
+//             foreach (User user in users)
+//             {
+//                 if (user.TryLogin(email, password))
+//                 {
+//                     active_user = user;
+//
+//                     break;
+//                 }
+//             }
+//
+//             menu = Menu.Main;
+//         }
+//             break;
+//
+//         case Menu.Register:
+//         {
+//             Console.Clear();
+//             Console.Write("Enter firstname: ");
+//             string? firstName = Console.ReadLine();
+//             Console.Write("Enter lastname: ");
+//             string? lastName = Console.ReadLine();
+//             Console.Write("Enter Date of birth: ");
+//             int dateOfBirth = int.Parse(Console.ReadLine());
+//             Console.Write("Enter Social Security Number: ");
+//             int socialSecurityNumber = int.Parse(Console.ReadLine());
+//             Console.Write("Enter email: ");
+//             string? email = Console.ReadLine();
+//             Console.Write("Enter password: ");
+//             string? password = Console.ReadLine();
+//             Console.Write("Enter regionName: ");
+//             string? regionName = Console.ReadLine();
+//
+//             Console.Clear();
+//             Debug.Assert(firstName != null);
+//             Debug.Assert(lastName != null);
+//             Debug.Assert(dateOfBirth != null);
+//             Debug.Assert(socialSecurityNumber != null);
+//             Debug.Assert(email != null);
+//             Debug.Assert(password != null);
+//             Debug.Assert(regionName != null);
+//
+//             users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName));
+//
+//
+//             // TODO: add saving file code here
+//
+//             menu = Menu.Main;
+//         }
+//             break;
+//
+//         case Menu.Main:
+//         {
+//         }
+//             break;
+//     }
+// }
+// /*
+// // Appointment system
+//
+// // ResquestAppointment
+//
+// List<Appointment> appointments = new();
+//
+// static void RequestAppointment(string patientName, string locationName, string regionName)
+// {
+//
+// }
+//
+//
+// Console.Clear();
+//             Console.WriteLine("\nWelcome! What would you like to do?");
+//             Console.WriteLine("....Appointment System....");
+//             Console.WriteLine("1. Request Appointment");
+//             Console.WriteLine("2. Register Appointment");
+//             Console.WriteLine("3. Modify Appointment");
+//             Console.WriteLine("4. Approve Appointment");
+//             Console.WriteLine("5. Logout");
+//             Console.WriteLine("6. Quit");
+//             Console.Write("Select one option and ENTER its number: ");
+//
+//             switch(Console.ReadLine())
+//             {
+//                 case "1":
+//                     {
+//                         Console.Clear();
+//                         Console.WriteLine("\nRegister an appointment as a patient");
+//                         if (CheckUserPermissions(active_user, Permission.RequestAppointment))
+//                         {
+//                             Console.WriteLine("Access Denied");
+//                             Console.ReadLine();
+//                         }
+//
+//
+//                     }break;
+//             }
+//
+//
+//
+//
+//
+//
+// // TODO: Implement location menu
+// /*
+// Console.WriteLine("=== List of All Locations ===");
+// Console.WriteLine();
+//
+// // Loop through all items in the list and print them
+// foreach (Location location in locations)
+//      {
+//         Console.WriteLine(location.Name + " - " + location.BelongsToRegion);
+//      }
+//
+//      Console.WriteLine("\nPress Enter to exit...");
+//      Console.ReadLine();
+// */
 
-User? active_user = null;
-Menu menu = Menu.None;
 
-bool running = true;
-
-while (running)
+static void ColorizedPrint(string print_message, ConsoleColor foreground_color = ConsoleColor.White,
+    object background_color = null)
 {
-    Console.Clear();
-    switch (menu)
+    if (background_color is ConsoleColor color)
     {
-        case Menu.None:
-            {
-                if (active_user == null)
-                {
-                    Console.WriteLine("1. Register");
-                    Console.WriteLine("2. Login");
-                    Console.WriteLine("3. Quit");
-                    Console.Write("Choose an option: ");
-
-                    switch (Console.ReadLine())
-                    {
-                        case "1": menu = Menu.Register; break;
-                        case "2": menu = Menu.Login; break;
-                        case "3": running = false; break;
-                    }
-                }
-                else
-                {
-                    switch (Console.ReadLine())
-                    {
-                        case "1":
-                        case "Add Location":
-                            Console.Clear();
-                            Console.Write("Chose a region: ");
-
-
-                            break;
-                    }
-                }
-            }
-            break;
-        case Menu.Login:
-            {
-                Console.Clear();
-                Console.Write("Enter email: ");
-                string? email = Console.ReadLine();
-                Console.Write("Enter password: ");
-                string? password = Console.ReadLine();
-
-                Console.Clear();
-                Debug.Assert(email != null);
-                Debug.Assert(password != null);
-
-                foreach (User user in users)
-                {
-                    if (user.TryLogin(email, password))
-                    {
-                        active_user = user;
-
-                        break;
-                    }
-                }
-
-                menu = Menu.Main;
-            }
-            break;
-
-        case Menu.Register:
-            {
-                Console.Clear();
-                Console.Write("Enter firstname: ");
-                string? firstName = Console.ReadLine();
-                Console.Write("Enter lastname: ");
-                string? lastName = Console.ReadLine();
-                Console.Write("Enter Date of birth: ");
-                int dateOfBirth = int.Parse(Console.ReadLine());
-                Console.Write("Enter Social Security Number: ");
-                int socialSecurityNumber = int.Parse(Console.ReadLine());
-                Console.Write("Enter email: ");
-                string? email = Console.ReadLine();
-                Console.Write("Enter password: ");
-                string? password = Console.ReadLine();
-                Console.Write("Enter regionName: ");
-                string? regionName = Console.ReadLine();
-
-                Console.Clear();
-                Debug.Assert(firstName != null);
-                Debug.Assert(lastName != null);
-                Debug.Assert(dateOfBirth != null);
-                Debug.Assert(socialSecurityNumber != null);
-                Debug.Assert(email != null);
-                Debug.Assert(password != null);
-                Debug.Assert(regionName != null);
-
-                users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName));
-
-
-                // TODO: add saving file code here
-
-                menu = Menu.Main;
-            }
-            break;
-
-        case Menu.Main:
-            {
-
-            }
-            break;
+        Console.BackgroundColor = color;
     }
+
+    Console.ForegroundColor = foreground_color;
+    Console.WriteLine(print_message);
+    Console.ResetColor();
 }
-/*
-// Appointment system
 
-// ResquestAppointment
-
-List<Appointment> appointments = new();
-
-static void RequestAppointment(string patientName, string locationName, string regionName)
+static string StringUserInput()
 {
-    
+    string? user_input = Console.ReadLine();
+    Debug.Assert(user_input != null);
+    return user_input;
+}
+
+static int IntUserInout()
+{
+    int.TryParse(Console.ReadLine(), out int user_input);
+    Debug.Assert(user_input != null);
+    return user_input;
 }
 
 
-Console.Clear();
-            Console.WriteLine("\nWelcome! What would you like to do?");
-            Console.WriteLine("....Appointment System....");
-            Console.WriteLine("1. Request Appointment");
-            Console.WriteLine("2. Register Appointment");
-            Console.WriteLine("3. Modify Appointment");
-            Console.WriteLine("4. Approve Appointment");
-            Console.WriteLine("5. Logout");
-            Console.WriteLine("6. Quit");
-            Console.Write("Select one option and ENTER its number: ");
-
-            switch(Console.ReadLine())
+static string PasswordInput()
+{
+    string password_acc = "";
+    ConsoleKeyInfo key_pressed;
+    while (true)
+    {
+        key_pressed = Console.ReadKey(true);
+        if (key_pressed.Key.Equals(ConsoleKey.Enter))
+        {
+            ColorizedPrint("Enter pressed", ConsoleColor.Green);
+            break;
+        }
+        else if (key_pressed.Key.Equals(ConsoleKey.Backspace))
+        {
+            if (password_acc.Length > 0)
             {
-                case "1":
-                    {
-                        Console.Clear();
-                        Console.WriteLine("\nRegister an appointment as a patient");
-                        if (CheckUserPermissions(active_user, Permission.RequestAppointment))
-                        {
-                            Console.WriteLine("Access Denied");
-                            Console.ReadLine();
-                        }
-
-                        
-                    }break;
+                password_acc = password_acc.Substring(0, password_acc.Length - 1);
             }
+        }
+        else
+        {
+            password_acc += key_pressed.KeyChar;
+        }
+    }
 
+    return password_acc;
+}
 
+ColorizedPrint("Do the flip", ConsoleColor.DarkMagenta);
+string pass = PasswordInput();
 
-
-
-
-// TODO: Implement location menu
-/*
-Console.WriteLine("=== List of All Locations ===");
-Console.WriteLine();
-
-// Loop through all items in the list and print them
-foreach (Location location in locations)
-     {
-        Console.WriteLine(location.Name + " - " + location.BelongsToRegion);
-     }
-
-     Console.WriteLine("\nPress Enter to exit...");
-     Console.ReadLine();
-*/
+ColorizedPrint($"Ha-ha I saw your password {pass}", ConsoleColor.DarkRed);
+// ConsoleKeyInfo key_pressed = Console.ReadKey(true);
+//
+// if (key_pressed.Key == ConsoleKey.Enter)
+// {
+//     ColorizedPrint("Enter pressed", ConsoleColor.Green);
+// }else{
+//     ColorizedPrint("Not enter", ConsoleColor.Red);
+// }
