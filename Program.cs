@@ -3,6 +3,7 @@ using System.Diagnostics;
 using static IOUtilsApp.IOUtils;
 
 List<User> users = new List<User>();
+
 users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass",
     PermissionEnum.MenagePermissions | PermissionEnum.ViewPermissionList));
 users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass"));
