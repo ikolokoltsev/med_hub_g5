@@ -1,38 +1,38 @@
-// namespace App;
+namespace App;
 
-// // Vad jag behöver är koppla detta till patient, kunna spara det. Permission to to watch. Permisssion to change.
-// // Information structure, date time, projections/prognoses perhaps
+// Vad jag behöver är koppla detta till patient, kunna spara det. Permission to to watch. Permisssion to change.
+// Information structure, date time, projections/prognoses perhaps
 
-// {
-//     public class JournalEntry
-// {
-//     public string OwnerEmail;
-//     public string AuthorEmail;
-//     public DateTime Timestamp;
-//     public string Content;
 
-//     public JournalEntry(string ownerEmail, string authorEmail, string content)
-//     {
-//         OwnerEmail = ownerEmail;
-//         AuthorEmail = authorEmail;
-//         Timestamp = DateTime.Now;
-//         Content = content;
-//     }
+public class JournalEntry
+{
+    public string OwnerEmail;
+    public string AuthorEmail;
+    public DateTime Timestamp;
+    public string Content;
 
-//     public override string ToString()
-//     {
-//         return $"{OwnerEmail};{AuthorEmail};{Timestamp};{Content}";
-//     }
+    public JournalEntry(string ownerEmail, string authorEmail, string content)
+    {
+        OwnerEmail = ownerEmail;
+        AuthorEmail = authorEmail;
+        Timestamp = DateTime.Now;
+        Content = content;
+    }
 
-//     public static JournalEntry FromSaveString(string line)
-//     {
-//         string[] parts = line.Split(';', 4, StringSplitOptions.TrimEntries);
-//         return new JournalEntry(parts[0], parts[1], parts[3])
-//         {
-//             Timestamp = DateTime.Parse(parts[2])
-//         };
-//     }
-// }
+    public override string ToString()
+    {
+        return $"{OwnerEmail};{AuthorEmail};{Timestamp};{Content}";
+    }
+
+    public static JournalEntry FromSaveString(string line)
+    {
+        string[] parts = line.Split(';', 4, StringSplitOptions.TrimEntries);
+        return new JournalEntry(parts[0], parts[1], parts[3])
+        {
+            Timestamp = DateTime.Parse(parts[2])
+        };
+    }
+}
 
 // public class JournalHandler
 // {
@@ -72,7 +72,7 @@
 //         File.WriteAllLines(FileName, lines);
 //     }
 
-//     // Endast ägaren kan läsa sin egen journal
+// Endast ägaren kan läsa sin egen journal
 //     public void ShowUserJournal(User user)
 //     {
 //         Console.WriteLine($"Journal för {user.Email}:");
@@ -95,7 +95,7 @@
 //         }
 //     }
 
-//     // ✍️ Endast personal med behörighet får skapa nya anteckningar
+//     // Endast personal med behörighet får skapa nya anteckningar
 //     public void AddJournalEntry(User author, string ownerEmail, string content)
 //     {
 //         if (!author.HasPermission(Permission.HanteraJournal))
