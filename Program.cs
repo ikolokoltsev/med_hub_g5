@@ -83,13 +83,10 @@ while (running)
                 string? email = Console.ReadLine();
                 Console.Write("Enter password: ");
                 string? password = Console.ReadLine();
-                Console.Write("Enter roleTitle: ");
-                string? roleTitle = Console.ReadLine();
 
                 Console.Clear();
                 Debug.Assert(email != null);
                 Debug.Assert(password != null);
-                Debug.Assert(roleTitle != null);
 
                 foreach (User user in users)
                 {
@@ -122,17 +119,6 @@ while (running)
                 string? password = Console.ReadLine();
                 Console.Write("Enter regionName: ");
                 string? regionName = Console.ReadLine();
-                Console.Write("Enter roleTitle: ");
-                string? roleInput = Console.ReadLine();
-                /*if (Enum.TryParse<Role>(roleInput, true, out Role roleTitle))
-                {
-                    Console.WriteLine($"You are {roleTitle}");
-                }
-                else
-                {
-                    Console.WriteLine("Invalid role entered.");
-                    roleTitle = Role.Patient;
-                }*/
 
                 Console.Clear();
                 Debug.Assert(firstName != null);
