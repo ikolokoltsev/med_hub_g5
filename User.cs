@@ -6,14 +6,16 @@ public enum PermissionEnum
     None = 0,
     MenagePermissions = 1 << 0,
     AssignToTheRegions = 1 << 1,
-    ManegeRegions = 1 << 2,
+    HandleRegions = 1 << 2,
     AddLocations = 1 << 3,
-    CreatePersonnel = 1 << 4,
-    ViewPermissionList = 1 << 5,
+    CreatePersonnelAccount = 1 << 4,
+    ShowPermissionList = 1 << 5,
     ManegeRegistrationRequest = 1 << 6,
-    ViewAllUsers = 1 << 7,
-    AddNewUser = 1 << 8,
-    ManageLocations = 1 << 9,
+    ShowPatientJournalEntities = 1 << 7,
+    MarkJournalEntitiesLevel = 1 << 8,
+    ManageAppointments = 1 << 9,
+    ViewTheSchedule = 1 << 10,
+
 }
 
 // TODO: implement setting the locale role depending on the context. 
@@ -37,8 +39,8 @@ public class User
     private PermissionEnum _permission;
     // public string? UserRole = RoleEnum.Patient.ToString(); // "Admin", "Personnel", "Patient".
 
-    public User(string firstName, string lastName, int dateOfBirth, int socialSecurityNumber, string email, string regionName,
-        string password, PermissionEnum initialPermission = PermissionEnum.None)
+    public User(string firstName, string lastName, int dateOfBirth, int socialSecurityNumber, string email,
+        string password, string regionName, PermissionEnum initialPermission = PermissionEnum.None)
 
     {
         FirstName = firstName;
