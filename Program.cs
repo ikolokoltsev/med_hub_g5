@@ -3,10 +3,12 @@ using System.Diagnostics;
 using static IOUtilsApp.IOUtils;
 
 List<User> users = new List<User>();
-users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass", RegionEnum.Halland.ToString(), Role.Admin));
-users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Skane.ToString(), Role.Patient));
-users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString(), Role.Personnel));
-users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Skane.ToString(), Role.Patient));
+
+users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass", RegionEnum.Halland.ToString(),
+    PermissionEnum.MenagePermissions | PermissionEnum.ViewPermissionList));
+users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString()));
+users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString()));
+users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString()));
 
 List<Region> regions = new List<Region>();
 regions.Add(new Region(RegionEnum.Skane));
@@ -27,6 +29,8 @@ locations.Add(new Location("Halmstad Hospital", RegionEnum.Halland.ToString()));
 locations.Add(new Location("Varberg Clinic", RegionEnum.Halland.ToString()));
 locations.Add(new Location("Lund Hospital", RegionEnum.Skane.ToString()));
 locations.Add(new Location("Malmö Clinic", RegionEnum.Skane.ToString()));
+
+// Permissions perm = new Permissions("Max", PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions);
 
 InitiateRegionWithLocations(regions, locations);
 
@@ -88,7 +92,7 @@ while (running)
 
             foreach (User user in users)
             {
-                if (user.TryLogin(email, password, Role.Patient))
+                if (user.TryLogin(email, password))
                 {
                         active_user = user;
                     
@@ -119,7 +123,7 @@ while (running)
             string? regionName = Console.ReadLine();
             Console.Write("Enter roleTitle: ");
             string? roleInput = Console.ReadLine();
-                if (Enum.TryParse<Role>(roleInput, true, out Role roleTitle))
+                /*if (Enum.TryParse<Role>(roleInput, true, out Role roleTitle))
                 {
                     Console.WriteLine($"You are {roleTitle}");
                 }
@@ -127,19 +131,18 @@ while (running)
                 {
                     Console.WriteLine("Invalid role entered.");
                     roleTitle = Role.Patient;
-                }
+                }*/
 
             Console.Clear();
             Debug.Assert(firstName != null);
             Debug.Assert(lastName != null);
             Debug.Assert(dateOfBirth != null);
             Debug.Assert(socialSecurityNumber != null);
-            Debug.Assert(roleTitle != null);
             Debug.Assert(email != null);
             Debug.Assert(password != null);
             Debug.Assert(regionName != null);
 
-            users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName, roleTitle));
+            users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName));
             
 
             // TODO: add saving file code here
@@ -150,10 +153,7 @@ while (running)
 
         case Menu.Main:
         {
-            if (roleTitle == Role.Admin)
-                    {
-                    
-                }
+
         }break;
     }
 }
