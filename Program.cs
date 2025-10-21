@@ -2,11 +2,14 @@
 using System.Diagnostics;
 using static IOUtilsApp.IOUtils;
 
-List<User> users = new();
-users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass"));
-users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass"));
-users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass"));
-users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass"));
+List<User> users = new List<User>();
+
+users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass", RegionEnum.Halland.ToString(),
+    PermissionEnum.MenagePermissions | PermissionEnum.AssignToTheRegions));
+users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString(), PermissionEnum.ManegeRegistrationRequest | PermissionEnum.AddLocations));
+
+users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString()));
+users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString()));
 
 List<Region> regions = new List<Region>();
 regions.Add(new Region(RegionEnum.Skane));
@@ -92,7 +95,7 @@ while (running)
                     }
                 }
 
-                menu = Menu.None;
+                menu = Menu.Main;
             }
             break;
 
@@ -107,31 +110,82 @@ while (running)
                 int dateOfBirth = int.Parse(Console.ReadLine());
                 Console.Write("Enter Social Security Number: ");
                 int socialSecurityNumber = int.Parse(Console.ReadLine());
-                Console.Write("Enter role/status: ");
-                string? role = Console.ReadLine();
                 Console.Write("Enter email: ");
                 string? email = Console.ReadLine();
                 Console.Write("Enter password: ");
                 string? password = Console.ReadLine();
+                Console.Write("Enter regionName: ");
+                string? regionName = Console.ReadLine();
 
                 Console.Clear();
                 Debug.Assert(firstName != null);
                 Debug.Assert(lastName != null);
                 Debug.Assert(dateOfBirth != null);
                 Debug.Assert(socialSecurityNumber != null);
-                // Debug.Assert(role != null);
                 Debug.Assert(email != null);
                 Debug.Assert(password != null);
+                Debug.Assert(regionName != null);
 
-                users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password));
+                users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName));
+
 
                 // TODO: add saving file code here
 
-                menu = Menu.None;
+                menu = Menu.Main;
+            }
+            break;
+
+        case Menu.Main:
+            {
+
             }
             break;
     }
 }
+/*
+// Appointment system
+
+// ResquestAppointment
+
+List<Appointment> appointments = new();
+
+static void RequestAppointment(string patientName, string locationName, string regionName)
+{
+    
+}
+
+
+Console.Clear();
+            Console.WriteLine("\nWelcome! What would you like to do?");
+            Console.WriteLine("....Appointment System....");
+            Console.WriteLine("1. Request Appointment");
+            Console.WriteLine("2. Register Appointment");
+            Console.WriteLine("3. Modify Appointment");
+            Console.WriteLine("4. Approve Appointment");
+            Console.WriteLine("5. Logout");
+            Console.WriteLine("6. Quit");
+            Console.Write("Select one option and ENTER its number: ");
+
+            switch(Console.ReadLine())
+            {
+                case "1":
+                    {
+                        Console.Clear();
+                        Console.WriteLine("\nRegister an appointment as a patient");
+                        if (CheckUserPermissions(active_user, Permission.RequestAppointment))
+                        {
+                            Console.WriteLine("Access Denied");
+                            Console.ReadLine();
+                        }
+
+                        
+                    }break;
+            }
+
+
+
+
+
 
 
 

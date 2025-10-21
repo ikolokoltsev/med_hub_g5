@@ -1,0 +1,28 @@
+/*
+registration request,
+accept patient registration,
+register appointments,
+modify appointment,
+approve appointment request, and
+List<Event>
+*/
+
+
+namespace App;
+
+enum EventType
+{
+    RegistrationRequested,
+    RegistrationAccepted,
+    AppointmentRegistered,
+    AppointmentModified,
+    AppointmentApproved,
+    PermissionGranted,
+    LocationAdded,
+    JournalViewed,
+    Login,
+    Logout,
+}
+
+
+
