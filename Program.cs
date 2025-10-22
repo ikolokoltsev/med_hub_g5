@@ -197,18 +197,6 @@ Console.Clear();
                     }break;
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // TODO: Implement location menu
 /*
 Console.WriteLine("=== List of All Locations ===");
