@@ -4,7 +4,7 @@ namespace App;
 public enum PermissionEnum
 {
     None = 0,
-    MenagePermissions = 1 << 0,
+    ManagePermissions = 1 << 0,
     AssignToTheRegions = 1 << 1,
     HandleRegions = 1 << 2,
     AddLocations = 1 << 3,

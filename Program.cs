@@ -4,20 +4,21 @@ using System.Diagnostics;
 List<User> users = new List<User>();
 
 users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass", RegionEnum.Halland.ToString(),
-    PermissionEnum.MenagePermissions | PermissionEnum.AssignToTheRegions));
-users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString(), PermissionEnum.ManegeRegistrationRequest | PermissionEnum.AddLocations));
+    PermissionEnum.ManagePermissions | PermissionEnum.AssignToTheRegions));
+users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString(),
+    PermissionEnum.ManegeRegistrationRequest | PermissionEnum.AddLocations));
 
 users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString()));
 users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString()));
 
 // Events record that new registration happened
-EventLog eventLog = new EventLog();
+// EventLog eventLog = new EventLog();
 
-EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
+// EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
 
 
 List<Region> regions = new List<Region>();
-regions.Add(new Region(RegionEnum.Skane)); 
+regions.Add(new Region(RegionEnum.Skane));
 regions.Add(new Region(RegionEnum.Halland));
 
 static void InitiateRegionWithLocations(List<Region> regions, List<Location> locations)
@@ -76,6 +77,9 @@ while (running)
                             Console.Write("Chose a region: ");
 
 
+                            //Eventslog to record that user logged in
+                            // EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");
+
                             break;
                     }
                 }
@@ -87,7 +91,7 @@ while (running)
                 Console.Write("Enter email: ");
                 string? email = Console.ReadLine();
                 Console.Write("Enter password: ");
-                string? password = Console.ReadLine();
+                string password = PasswordInput();
 
                 Console.Clear();
                 Debug.Assert(email != null);
@@ -98,9 +102,6 @@ while (running)
                     if (user.TryLogin(email, password))
                     {
                         active_user = user;
-
-                     //Eventslog to record that user logged in
-                     EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");              
 
                         break;
                     }
@@ -124,15 +125,15 @@ while (running)
                 Console.Write("Enter email: ");
                 string? email = Console.ReadLine();
                 Console.Write("Enter password: ");
-                string? password = Console.ReadLine();
+                string password = PasswordInput();
                 Console.Write("Enter regionName: ");
                 string? regionName = Console.ReadLine();
 
                 // Event record that new registration happened
 
                 EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
-               
-               
+
+
                 Console.Clear();
                 Debug.Assert(firstName != null);
                 Debug.Assert(lastName != null);
@@ -154,7 +155,6 @@ while (running)
 
         case Menu.Main:
             {
-
             }
             break;
     }
@@ -168,7 +168,7 @@ List<Appointment> appointments = new();
 
 static void RequestAppointment(string patientName, string locationName, string regionName)
 {
-    
+
 }
 
 
@@ -195,7 +195,7 @@ Console.Clear();
                             Console.ReadLine();
                         }
 
-                        
+
                     }break;
             }
 
@@ -218,3 +218,73 @@ foreach (Location location in locations)
      Console.WriteLine("\nPress Enter to exit...");
      Console.ReadLine();
 */
+
+
+static void ColorizedPrint(string print_message, ConsoleColor foreground_color = ConsoleColor.White,
+    object background_color = null)
+{
+    if (background_color is ConsoleColor color)
+    {
+        Console.BackgroundColor = color;
+    }
+
+    Console.ForegroundColor = foreground_color;
+    Console.WriteLine(print_message);
+    Console.ResetColor();
+}
+
+static string StringUserInput()
+{
+    string? user_input = Console.ReadLine();
+    Debug.Assert(user_input != null);
+    return user_input;
+}
+
+static int IntUserInout()
+{
+    int.TryParse(Console.ReadLine(), out int user_input);
+    Debug.Assert(user_input != null);
+    return user_input;
+}
+
+
+static string PasswordInput()
+{
+    string password_acc = "";
+    ConsoleKeyInfo key_pressed;
+    while (true)
+    {
+        key_pressed = Console.ReadKey(true);
+        if (key_pressed.Key.Equals(ConsoleKey.Enter))
+        {
+            ColorizedPrint("Enter pressed", ConsoleColor.Green);
+            break;
+        }
+        else if (key_pressed.Key.Equals(ConsoleKey.Backspace))
+        {
+            if (password_acc.Length > 0)
+            {
+                password_acc = password_acc.Substring(0, password_acc.Length - 1);
+            }
+        }
+        else
+        {
+            password_acc += key_pressed.KeyChar;
+        }
+    }
+
+    return password_acc;
+}
+
+ColorizedPrint("Do the flip", ConsoleColor.DarkMagenta);
+string pass = PasswordInput();
+
+ColorizedPrint($"Ha-ha I saw your password {pass}", ConsoleColor.DarkRed);
+// ConsoleKeyInfo key_pressed = Console.ReadKey(true);
+//
+// if (key_pressed.Key == ConsoleKey.Enter)
+// {
+//     ColorizedPrint("Enter pressed", ConsoleColor.Green);
+// }else{
+//     ColorizedPrint("Not enter", ConsoleColor.Red);
+// }
