@@ -131,7 +131,7 @@ while (running)
 
                 // Event record that new registration happened
 
-                EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
+                // EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
 
 
                 Console.Clear();
