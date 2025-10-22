@@ -14,7 +14,7 @@ enum EventTypeEnum
 {
     RegistrationRequested,
     RegistrationAccepted,
-    AppointmentRegistered,
+    AppointmentDenied,
     AppointmentModified,
     AppointmentApproved,
     PermissionGranted,
