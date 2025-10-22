@@ -11,6 +11,12 @@ users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", R
 users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString()));
 users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString()));
 
+// Events record that new registration happened
+// EventLog eventLog = new EventLog();
+
+// EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
+
+
 List<Region> regions = new List<Region>();
 regions.Add(new Region(RegionEnum.Skane));
 regions.Add(new Region(RegionEnum.Halland));
@@ -46,101 +52,110 @@ while (running)
     switch (menu)
     {
         case Menu.None:
-        {
-            if (active_user == null)
             {
-                Console.WriteLine("1. Register");
-                Console.WriteLine("2. Login");
-                Console.WriteLine("3. Quit");
-                Console.Write("Choose an option: ");
-
-                switch (Console.ReadLine())
+                if (active_user == null)
                 {
-                    case "1": menu = Menu.Register; break;
-                    case "2": menu = Menu.Login; break;
-                    case "3": running = false; break;
+                    Console.WriteLine("1. Register");
+                    Console.WriteLine("2. Login");
+                    Console.WriteLine("3. Quit");
+                    Console.Write("Choose an option: ");
+
+                    switch (Console.ReadLine())
+                    {
+                        case "1": menu = Menu.Register; break;
+                        case "2": menu = Menu.Login; break;
+                        case "3": running = false; break;
+                    }
+                }
+                else
+                {
+                    switch (Console.ReadLine())
+                    {
+                        case "1":
+                        case "Add Location":
+                            Console.Clear();
+                            Console.Write("Chose a region: ");
+
+
+                            //Eventslog to record that user logged in
+                            // EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");
+
+                            break;
+                    }
                 }
             }
-            else
-            {
-                switch (Console.ReadLine())
-                {
-                    case "1":
-                    case "Add Location":
-                        Console.Clear();
-                        Console.Write("Chose a region: ");
-
-
-                        break;
-                }
-            }
-        }
             break;
         case Menu.Login:
-        {
-            Console.Clear();
-            Console.Write("Enter email: ");
-            string? email = Console.ReadLine();
-            Console.Write("Enter password: ");
-            string password = PasswordInput();
-
-            Console.Clear();
-            Debug.Assert(email != null);
-            Debug.Assert(password != null);
-
-            foreach (User user in users)
             {
-                if (user.TryLogin(email, password))
+                Console.Clear();
+                Console.Write("Enter email: ");
+                string? email = Console.ReadLine();
+                Console.Write("Enter password: ");
+                string password = PasswordInput();
+
+                Console.Clear();
+                Debug.Assert(email != null);
+                Debug.Assert(password != null);
+
+                foreach (User user in users)
                 {
-                    active_user = user;
+                    if (user.TryLogin(email, password))
+                    {
+                        active_user = user;
 
-                    break;
+                        break;
+                    }
                 }
-            }
 
-            menu = Menu.Main;
-        }
+                menu = Menu.Main;
+            }
             break;
 
         case Menu.Register:
-        {
-            Console.Clear();
-            Console.Write("Enter firstname: ");
-            string? firstName = Console.ReadLine();
-            Console.Write("Enter lastname: ");
-            string? lastName = Console.ReadLine();
-            Console.Write("Enter Date of birth: ");
-            int dateOfBirth = int.Parse(Console.ReadLine());
-            Console.Write("Enter Social Security Number: ");
-            int socialSecurityNumber = int.Parse(Console.ReadLine());
-            Console.Write("Enter email: ");
-            string? email = Console.ReadLine();
-            Console.Write("Enter password: ");
-            string password = PasswordInput();
-            Console.Write("Enter regionName: ");
-            string? regionName = Console.ReadLine();
+            {
+                Console.Clear();
+                Console.Write("Enter firstname: ");
+                string? firstName = Console.ReadLine();
+                Console.Write("Enter lastname: ");
+                string? lastName = Console.ReadLine();
+                Console.Write("Enter Date of birth: ");
+                int dateOfBirth = int.Parse(Console.ReadLine());
+                Console.Write("Enter Social Security Number: ");
+                int socialSecurityNumber = int.Parse(Console.ReadLine());
+                Console.Write("Enter email: ");
+                string? email = Console.ReadLine();
+                Console.Write("Enter password: ");
+                string password = PasswordInput();
+                Console.Write("Enter regionName: ");
+                string? regionName = Console.ReadLine();
 
-            Console.Clear();
-            Debug.Assert(firstName != null);
-            Debug.Assert(lastName != null);
-            Debug.Assert(dateOfBirth != null);
-            Debug.Assert(socialSecurityNumber != null);
-            Debug.Assert(email != null);
-            Debug.Assert(password != null);
-            Debug.Assert(regionName != null);
+                // Event record that new registration happened
 
-            users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName));
+                EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
 
 
-            // TODO: add saving file code here
+                Console.Clear();
+                Debug.Assert(firstName != null);
+                Debug.Assert(lastName != null);
+                Debug.Assert(dateOfBirth != null);
+                Debug.Assert(socialSecurityNumber != null);
+                Debug.Assert(email != null);
+                Debug.Assert(password != null);
+                Debug.Assert(regionName != null);
 
-            menu = Menu.Main;
-        }
+                users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName));
+
+
+
+                // TODO: add saving file code here
+
+                menu = Menu.Main;
+            }
             break;
 
         case Menu.Main:
-        {
-        }
+            {
+            }
             break;
     }
 }
