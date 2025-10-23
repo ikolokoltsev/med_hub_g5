@@ -11,8 +11,8 @@ public enum PermissionEnum
     CreatePersonnelAccount = 1 << 4,
     ShowPermissionList = 1 << 5,
     ManegeRegistrationRequest = 1 << 6,
-    ShowPatientJournalEntities = 1 << 7,
-    MarkJournalEntitiesLevel = 1 << 8,
+    ShowPatientJournalEntries = 1 << 7,
+    MarkJournalEntriesLevel = 1 << 8,
     ManageAppointments = 1 << 9,
     ViewTheSchedule = 1 << 10,
 

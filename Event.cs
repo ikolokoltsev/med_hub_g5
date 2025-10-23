@@ -33,16 +33,16 @@ class EventLog
     public EventLog(string user, EventTypeEnum eventType, string description)
     {
         User = user;
-        EventType = evenType;
+        EventType = eventType;
         Description = description;
     }
 
     private static List<EventRecord> events = new List<EventRecord>();
 
     // Add an event to the list
-    public static void AddEvent(string user, EventType type, string description)
+    public static void AddEvent(string user, EventTypeEnum eventType, string description)
     {
-        events.Add(new EventRecord(user, type, description, DateTime.Now));
+        events.Add(new EventRecord(user, eventType, description, DateTime.Now));
     }
 
     // Show all events in the console

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 
 List<User> users = new List<User>();
-List<Appointment> appointments = new List<Appointment>;
+List<Appointment> appointments = new List<Appointment>();
 
 users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass", RegionEnum.Halland.ToString(),
     PermissionEnum.MenagePermissions | PermissionEnum.AssignToTheRegions | PermissionEnum.CreatePersonnelAccount | PermissionEnum.ShowPermissionsList));
@@ -158,23 +158,23 @@ while (running)
         case Menu.Main:
             {
                Console.Clear();
-               Console.WriteLine($"Welcome {active_user.FisrtName}!");
+               Console.WriteLine($"Welcome {active_user.FirstName}!");
                 Console.WriteLine("\n---------------------------------");
 
-               // Show only the options the Logged-in User has access to
+               // Display only what this user has permission for
                if (active_user.HasPermission(PermissionEnum.ManageAppointments))
                {
                 Console.WriteLine("\n1. Manage Appointments (Modify, Accept or Deny)");
                }
-               if if (active_user.HasPermission(PermissionEnum.ViewTheSchedule))
+               if (active_user.HasPermission(PermissionEnum.ViewTheSchedule))
                {
                 Console.WriteLine("\n2. View a Location Schedule");
                }
-               if (active_user.HasPermission(PermissionEnum.ManageRegistrationRequest))
+               if (active_user.HasPermission(PermissionEnum.ManegeRegistrationRequest))
                {
                 Console.WriteLine("\n3. Manage Patients Registration (Accept or Deny)");
                }
-                if (active_user.HasPermission(PermissionEnum.ManagePermissions))
+                if (active_user.HasPermission(PermissionEnum.MenagePermissions))
                {
                 Console.WriteLine("\n4. Manage User Permissions");
                }
@@ -194,7 +194,7 @@ while (running)
                {
                 Console.WriteLine("\n8. Show Permissions List");
                }
-               if (active_user.HasPermission(PermissionEnum.ShowPatientJournalEnteries))
+               if (active_user.HasPermission(PermissionEnum.ShowPatientJournalEntries))
                {
                 Console.WriteLine("\n9. Show Patient Journal Enteries");
                }
@@ -206,19 +206,133 @@ while (running)
                switch (Console.ReadLine())
                {
 
-                case "1":
-                    if (active_user.HasPermission(PermissionEnum.ManageAppointments))
-                    {
-                        Console.WriteLine("ENTER what you want to do: "Accept" or "Deny"?)");
-                        if (Console.ReadLine() == "Accept")
+                    case "1":
+                        if (active_user.HasPermission(PermissionEnum.ManageAppointments))
                         {
+                            Console.Clear();
+                            Console.WriteLine(".....Manage Appointments.....")
+                            Console.WriteLine("ENTER one option: "Accept" or "Deny"?)");
+                            string? userAction = Console.WriteLine;
 
-                        }
-                    }
+                            Appointment appointment = new Appointment(active_user, LocationName, DateAndTime);
+                            if (userAction?.Equals("Accept", StringComparison.OrdinalIgnoreCase) == true)
+                            {
+                            appointment.Approve(active_user);
+                            Console.WriteLine("Appointment approved!");
+                            }
+                            else if (userAction?.Equals("Deny", StringComparison.OrdinalIgnoreCase) == true)
+                            {
+                                appointment.Deny(active_user);
+                                Console.WriteLine("Appointment denied!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Please choose one of the options provided.")
+                            }
+                            Console.WriteLine("Press ENTER to continue...");
+                            Console.ReadLine();
+                        }break;
+                
+                    case "2":
+                        if (active_user.HasPermission(PermissionEnum.ViewTheSchedule))
+                        {
+                            Console.Clear();
+                            Console.WriteLine(".....View a Location List.....");
+                            foreach (Location location in locations)
+                            {
+                                Console.WriteLine(location);
+                            }
+                            Console.WriteLine("Press ENTER to continue...");
+                            Console.ReadLine();
+                        }break;
+                    
+                    case "3":
+                        if (active_user.HasPermission(PermissionEnum.ManageRegistrationRequest))
+                        {
+                            Console.Clear();
+                            Console.WriteLine(".....Manage Patients Registration ==> Modify, Accept or Deny.....")
+                            Console.WriteLine("ENTER one option: "Modify", Accept" or "Deny"?)");
+                            string? userAction = Console.ReadLine();
 
+                            // Create a "pending registration" user
+                            User pendingUser = new User(
+                                firstName: "Sarah",
+                                lastName: "Lastname",
+                                dateOfBirth: 26,
+                                socialSecuriyNumber: 19951208,
+                                email: "sara@gmail.com",
+                                password: "pass22"
+                                regionName: RegionEnum.Halland.ToString(),
+                                permission: PermissionEnum.None
+                            );
+
+                            Appointment appointment = new Appointment(active_user, LocationName, DateAndTime);
+                            if (userAction?.Equals("Accept", StringComparison.OrdinalIgnoreCase) == true)
+                            {
+                            Console.WriteLine("Registration for {pendingUser.FirstName} {pendingUser.LastName} has been accepted.");
+
+                            // Event log
+                            EventLog.AddEvent(active_user.Email, EventTypeEnum.RegistrationAccepted, $"Accepted registration request for {pendingUser.Email}.");
+                            }
+                            else if (userAction?.Equals("Deny", StringComparison.OrdinalIgnoreCase) == true)
+                            {
+                                Console.WriteLine("Registration for {pendingUser.FirstName} {pendingUser.LastName} has been denied.");
+                            
+                            // Event log
+                            EventLog.AddEvent(active_user.Email, EventTypeEnum.RegistrationDenied, $"Denied registration request for {pendingUser.Email}.");
+                            }
+                            else if (userAction?.Equals("Modify", StringComparison.OrdinalIgnoreCase) == true)
+                            {
+                            Console.WriteLine("Modify registration details for {pendingUser.FirstName} {pendingUser.LastName}");
+                            Console.Write("Enter new email: ");
+                            string? newEmail = Console.ReadLine();
+                            Console.Write("Enter new region: ");
+                            string? newRegion = Console.ReadLine();
+
+                            pendingUser.Email = newEmail ?? pendingUser.Email;
+                            pendingUser.RegionName = newRegion ?? pendingUser.RegionName;
+
+                            Console.WriteLine("Registration modified");
+                            // Event log
+                            EventLog.AddEvent(active_user.Email, EventTypeEnum.RegistrationModified, $"Modified registration for {pendingUser.Email}.");
+                            else
+                            {
+                                Console.WriteLine("Please choose one of the options provided.");
+                            }
+                            Console.WriteLine("Press ENTER to continue...");
+                            Console.ReadLine();
+                        else
+                        {
+                            Console.WriteLine("Access denied.");
+                        }break;
+
+                    case "4":
+                        if (active_user.HasPermission(PermissionEnum.MenagePermissions))
+                        {
+                            Console.Clear();
+                            Console.WriteLine(".....Manage User Perissions.....");
+                            Console.WriteLine("--------------------------------");
+
+                            // Show all registered users
+                            for (int i = 0; i < users.Count; i++)
+                            {
+                                Console.WriteLine($"{i + 1}. {users[i].FirstName} {users[i].LastName} | Current Permission: {users[i].Permission}");
+                            }
+                            Console.Write("\nSelect a user number to modify permissions: ");
+                            if (!int.TryParse(Console.ReadLine(), out int userIndex) || userIndex < 1 || userIndex > users.Count)
+                            {
+                                Console.WriteLine("Invalid user selection.");
+                                Console.ReadLine();
+                                break;
+                            }
+                            User selectedUser = users[userIndex - 1];
+
+                            Console.Clear();
+                            Console.WriteLine($"Selected user: {selectedUser.FirstName} {selectedUser.LastName}");
+                            Console.WriteLine($"Current permissions: {selectedUser.HasPermission}\n");");
+                        }break;
                }
-            }
-            break;
+            }break;
     }
 }
 /*
