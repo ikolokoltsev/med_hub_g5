@@ -1,4 +1,6 @@
 ﻿using App;
+
+
 using System.Diagnostics;
 using System.Globalization;
 
@@ -102,12 +104,9 @@ while (running)
                     {
                         active_user = user;
 
-<<<<<<< HEAD
-=======
                         //Eventslog to record that user logged in
-                        EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");
+                        // EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");
 
->>>>>>> dbc3a24ce08aa51e2e6eef5974d9fb1ab89b9489
                         break;
                     }
                 }
@@ -313,7 +312,7 @@ static bool Validate(string personalNumber)
     if (!DateTime.TryParseExact(datePart, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None,
             out DateTime birthDate))
     {
-        ColorizedPrint("The date part is not a valid date.",  ConsoleColor.DarkRed);
+        ColorizedPrint("The date part is not a valid date.", ConsoleColor.DarkRed);
         return false;
     }
 
