@@ -47,27 +47,35 @@ class EventLog
 
     // Show all events in the console
     public static void ShowAllEvents()
+
     {
-        foreach (var ev in events)
+        if (events.Count == 0)
         {
-            Console.WriteLine($"{ev.Timestamp}: {ev.User} - {ev.Type} - {ev.Description}");
+            Console.WriteLine("No events logged yet.");
+            return;
+        }
+
+        foreach (var e in events)
+        {
+            Console.WriteLine($"{e.Timestamp} - {e.EventType} - {e.Description}");
         }
     }
-}
 
-// Small helper class to store one event record
-class EventRecord
-{
-    public string User;
-    public EventType Type;
-    public string Description;
-    public DateTime Timestamp;
 
-    public EventRecord(string user, EventTypeEnum type, string description, DateTime timestamp)
+    // Small helper class to store one event record
+    class EventRecord
     {
-        User = user;
-        Type = type;
-        Description = description;
-        Timestamp = timestamp;
+        public string User;
+        public EventTypeEnum EventType;
+        public string Description;
+        public DateTime Timestamp;
+
+        public EventRecord(string user, EventTypeEnum eventType, string description, DateTime timestamp)
+        {
+            User = user;
+            EventType = eventType;
+            Description = description;
+            Timestamp = timestamp;
+        }
     }
 }
