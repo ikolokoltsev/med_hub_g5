@@ -13,8 +13,8 @@ public enum AppointmentRequestStatusEnum
 }
 class Appointment
 {
-    public User BookedBy;  // Who the appointment is for
-    public User ManagedBy;  // Who managed the appointment
+    public User? BookedBy;  // Who the appointment is for
+    public User? ManagedBy;  // Who manages or handles the appointment
     public string LocationName;    // Where it will take place
     public DateTime DateAndTime;   // When the appointment is scheduled
     public AppointmentStatusEnum Status; // The status of the appointment
@@ -22,31 +22,32 @@ class Appointment
     // Constructor (used when creating a new appointment)
     public Appointment(User bookedBy, User managedBy, string location, DateTime dateAndTime)
     {
-        BookedBy = bookBy;
+        BookedBy = bookedBy;
         ManagedBy = managedBy;
         LocationName = location;
         DateAndTime = dateAndTime;
         Status = AppointmentStatusEnum.Pending;  // Default when created
 
 
-        EventLog.AddEvent(bookBy.SocialSecurityNumber, managedBy.SocialSecurityNumber, EventTypeEnum.AppointmentRegistered, $"Appointment registered at {location} on {dateAndTime}.");
+        EventLog.AddEvent(bookedBy.Email, EventTypeEnum.RegistrationRequested,
+        $"Appointment registered at {location} for {bookedBy.SocialSecurityNumber}, managed by {managedBy.SocialSecurityNumber} on {dateAndTime}.");
     }
 
     public void Accept(User approver)
     {
-        Status = AppointmemtStatusEnum.Accepted;
-        EventLog.AddEvent(approver.SocialSecurityNumber, EventTypeEnum.AppointmentApproved, $"Approved appointment for {bookedBy.SocialSecurityNumber} at {location}.");
+        Status = AppointmentStatusEnum.Completed;
+        EventLog.AddEvent(approver.Email, EventTypeEnum.AppointmentApproved, $"Approved appointment for {BookedBy.SocialSecurityNumber} at {LocationName}.");
     }
 
     public void Deny (User approver)
     {
-        Status = AppointmentStatusEnum.Denied;
-        EventLog.AddEvent(approver.SocialSecurityNumber, EventTypeEnum.AppointmentDenied, $"Denied appointment for {bookedBy.SocialSecurityNumber} at {location}.");
+        Status = AppointmentStatusEnum.Cancelled;
+        EventLog.AddEvent(approver.Email, EventTypeEnum.AppointmentDenied, $"Denied appointment for {BookedBy.SocialSecurityNumber} at {LocationName}.");
     }
 
     public string ToDisplayString()
     {
-        return $"{BookedBy.SocialSecurityNumber} | {ManagedBy.SocialSecurityNumber} | {LocationName.Name} | {DateAndTime} | {Status}";
+        return $"{BookedBy.Email} | {ManagedBy.Email} | {LocationName} | {DateAndTime} | {Status}";
     }
 
 }

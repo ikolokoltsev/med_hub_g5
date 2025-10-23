@@ -59,55 +59,24 @@ public class User
         return email == Email && password == _password;
     }
 
+     // TODO: AddPermission and RemovePermission probably should be moved into the PermissionManager class(?)
+    public void AddPermission(PermissionEnum permission)
+    {
+        _permission |= permission;
+    }
+
+    public void RemovePermission(PermissionEnum permission)
+    {
+        _permission &= ~permission;
+    }
+
+    public bool HasPermission(PermissionEnum permission)
+    {
+        return _permission.HasFlag(permission);
+    }
+
     public string ToSaveString()
     {
         return $"{FirstName}, {LastName}; {DateOfBirth}; {SocialSecurityNumber}; {Email};{_password}";
     }
 }
-
-
-/*
-// Automatically assign permission to each role 
-class RolePermission
-{
-    public static List<Permission> GetPermissionsForEachRole(Role roleTitle)
-    {
-        switch (roleTitle)
-        {
-            case Role.Admin:
-
-                return new List<Permission>
-                {
-                    Permission.HandlePermissions,
-                    Permission.AssignRegion,
-                    Permission.HandleRegistration,
-                    Permission.AddLocation,
-                    Permission.CreatePersonnelAccount,
-                    Permission.ViewPermissionList,
-                    Permission.ViewPatientJournal,
-                    Permission.SetJournalReadLevel,
-                    Permission.ApproveAppointment,
-                    Permission.ModifyAppointment,
-                    Permission.ViewLocationSchedule
-                };
-            case Role.Personnel:
-                return new List<Permission>
-                {
-                    Permission.RegisterAppointment,
-                    Permission.ModifyAppointment,
-                    Permission.ViewLocationSchedule,
-                    Permission.ViewPatientJournal
-                };
-            case Role.Patient:
-                return new List<Permission>
-                {
-                    Permission.RequestAppointment,
-                    Permission.ViewOwnJournal,
-                    Permission.ViewOwnSchedule
-                };
-            default:
-                return new List<Permission>();
-        }
-    }
-}
-*/

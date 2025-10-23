@@ -12,6 +12,7 @@ namespace App;
 
 enum EventTypeEnum
 {
+    RegistrationModified,
     RegistrationRequested,
     RegistrationAccepted,
     AppointmentDenied,
