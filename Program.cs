@@ -10,10 +10,13 @@ users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", R
 users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString()));
 users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString()));
 
-// Events record that new registration happened
-EventLog eventLog = new EventLog();
+// Record registration Event for each user
+foreach (var user in users)
+{
+    EventLog.AddEvent(user.FirstName, EventTypeEnum.RegistrationRequested,
+        $"New user {user.FirstName} registered in {user.RegionName}.");
+}
 
-EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
 
 
 List<Region> regions = new List<Region>();
@@ -100,7 +103,7 @@ while (running)
                         active_user = user;
 
                      //Eventslog to record that user logged in
-                     EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");              
+                     EventLog.AddEvent(active_user.FirstName, EventTypeEnum.Login, $"{active_user.FirstName} logged in.");              
 
                         break;
                     }
@@ -130,7 +133,7 @@ while (running)
 
                 // Event record that new registration happened
 
-                EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
+                EventLog.AddEvent(firstName, EventTypeEnum.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
                
                
                 Console.Clear();
