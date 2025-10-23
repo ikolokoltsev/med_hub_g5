@@ -4,7 +4,7 @@ namespace App;
 public enum PermissionEnum
 {
     None = 0,
-    MenagePermissions = 1 << 0,
+    ManagePermissions = 1 << 0,
     AssignToTheRegions = 1 << 1,
     HandleRegions = 1 << 2,
     AddLocations = 1 << 3,
@@ -25,7 +25,6 @@ enum RoleEnum
     Personnel,
     Admin
 }
-
 public class User
 {
     public string FirstName;
@@ -58,22 +57,6 @@ public class User
     public bool TryLogin(string email, string password)
     {
         return email == Email && password == _password;
-    }
-
-    // TODO: AddPermission and RemovePermission probably should be moved into the PermissionManager class(?)
-    public void AddPermission(PermissionEnum permission)
-    {
-        _permission |= permission;
-    }
-
-    public void RemovePermission(PermissionEnum permission)
-    {
-        _permission &= ~permission;
-    }
-
-    public bool HasPermission(PermissionEnum permission)
-    {
-        return _permission.HasFlag(permission);
     }
 
     public string ToSaveString()
