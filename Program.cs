@@ -5,14 +5,16 @@ using System.Diagnostics;
 using System.Globalization;
 
 List<User> users = new List<User>();
+List<Appointment> appointments = new List<Appointment>;
 
 users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass", RegionEnum.Halland.ToString(),
-    PermissionEnum.ManagePermissions | PermissionEnum.AssignToTheRegions));
-users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString(),
-    PermissionEnum.ManegeRegistrationRequest | PermissionEnum.AddLocations));
-
-users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString()));
-users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString()));
+    PermissionEnum.MenagePermissions | PermissionEnum.AssignToTheRegions | PermissionEnum.CreatePersonnelAccount | PermissionEnum.ShowPermissionsList));
+users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString(), 
+    PermissionEnum.ManegeRegistrationRequest | PermissionEnum.AddLocations | PermissionEnum.ShowPatiensJournalEntries));
+users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString(), 
+    PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManegeRegistrationRequest));
+users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString(), 
+    PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManegeRegistrationRequest));
 
 // Record registration Event for each user
 foreach (var user in users)
@@ -162,6 +164,66 @@ while (running)
 
         case Menu.Main:
             {
+               Console.Clear();
+               Console.WriteLine($"Welcome {active_user.FisrtName}!");
+                Console.WriteLine("\n---------------------------------");
+
+               // Show only the options the Logged-in User has access to
+               if (active_user.HasPermission(PermissionEnum.ManageAppointments))
+               {
+                Console.WriteLine("\n1. Manage Appointments (Modify, Accept or Deny)");
+               }
+               if if (active_user.HasPermission(PermissionEnum.ViewTheSchedule))
+               {
+                Console.WriteLine("\n2. View a Location Schedule");
+               }
+               if (active_user.HasPermission(PermissionEnum.ManageRegistrationRequest))
+               {
+                Console.WriteLine("\n3. Manage Patients Registration (Accept or Deny)");
+               }
+                if (active_user.HasPermission(PermissionEnum.ManagePermissions))
+               {
+                Console.WriteLine("\n4. Manage User Permissions");
+               }
+                if (active_user.HasPermission(PermissionEnum.AddLocations))
+               {
+                Console.WriteLine("\n5. Add Location");
+               }
+               if (active_user.HasPermission(PermissionEnum.AssignToTheRegions))
+               {
+                Console.WriteLine("\n6. Assign to the Regions");
+               }
+               if (active_user.HasPermission(PermissionEnum.CreatePersonnelAccount))
+               {
+                Console.WriteLine("\n7. Create Personnel Account");
+               }
+               if (active_user.HasPermission(PermissionEnum.ShowPermissionList))
+               {
+                Console.WriteLine("\n8. Show Permissions List");
+               }
+               if (active_user.HasPermission(PermissionEnum.ShowPatientJournalEnteries))
+               {
+                Console.WriteLine("\n9. Show Patient Journal Enteries");
+               }
+
+               Console.WriteLine("10. Logout");
+               Console.WriteLine("11. Quit");
+               Console.Write("Choose an option: ");
+
+               switch (Console.ReadLine())
+               {
+
+                case "1":
+                    if (active_user.HasPermission(PermissionEnum.ManageAppointments))
+                    {
+                        Console.WriteLine("ENTER what you want to do: "Accept" or "Deny"?)");
+                        if (Console.ReadLine() == "Accept")
+                        {
+
+                        }
+                    }
+
+               }
             }
             break;
     }

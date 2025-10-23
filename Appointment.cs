@@ -13,45 +13,39 @@ public enum AppointmentRequestStatusEnum
 }
 class Appointment
 {
-    public string PatientName;     // Who the appointment is for
-    public string PersonnelName;   // Which doctor/staff will handle it
+    public User BookedBy;   // Who the appointment is for
     public string LocationName;    // Where it will take place
     public DateTime DateAndTime;   // When the appointment is scheduled
     public AppointmentStatusEnum Status; // The status of the appointment
-    public List<Appointment> Appointments = new List<Appointment>();
+    //public List<Appointment> Appointments = new List<Appointment>();
 
     // Constructor (used when creating a new appointment)
-    public Appointment(string patient, string personnel, string location, DateTime dateAndTime)
+    public Appointment(User bookedBy, string location, DateTime dateAndTime, )
     {
-        PatientName = patient;
-        PersonnelName = personnel;
+        BookedBy = bookBy;
         LocationName = location;
         DateAndTime = dateAndTime;
         Status = AppointmentStatusEnum.Pending;  // Default when created
-    }
-}
 
-class AppointmentRequest
 
-{
-    public User PatientName;    // Who is asking for the appointment
-    public string LocationName;   // Where they want to go (clinic/hospital)
-    public User RegionName;   // Which region they want to go (clinic/hospital)
-
-    public AppointmentRequestStatusEnum AppointmentRequestStatus;       // Has this request been approved yet?
-
-    // Constructor - runs when we create a new appointment request
-    public AppointmentRequest(User patientName, string locationName, User regionName)
-    {
-        PatientName = patientName;
-        LocationName = locationName;
-        RegionName = regionName;
+        EventLog.AddEvent(bookBy.SocialSecurityNumber, EventTypeEnum.AppointmentRegistered, $"Appointment registered at {location} on {dateAndTime}.");
     }
 
-    public string ToSaveString()
+    public void Accept(User approver)
     {
-        string result = $"{PatientName},{PatientName.Email},{PatientName.SocialSecurityNumber},{PatientName.RegionName},{LocationName}";
-        return result;
+        Status = AppointmemtStatusEnum.Accepted;
+        EventLog.AddEvent(approver.SocialSecurityNumber, EventTypeEnum.AppointmentApproved, $"Appointment registered by {bookedBy.SocialSecurityNumber} at {location}.")
+    }
+
+    public void Deny (User approver)
+    {
+        Status = AppointmentStatusEnum.Denied;
+        EventLog.AddEvent(approver.SocialSecurityNumber, EventTypeEnum.AppointmentDenied, $"Denied appointment for {bookedBy.SocialSecurityNumber} at {location}."))
+    }
+
+    public string ToDisplayString()
+    {
+        return $"{BookedBy.SocialSecurityNumber} | {LocationName} | {DateAndTime} | {Status}";
     }
 
 }
