@@ -25,7 +25,6 @@ enum RoleEnum
     Personnel,
     Admin
 }
-
 public class User
 {
     public string FirstName;
@@ -58,22 +57,6 @@ public class User
     public bool TryLogin(string email, string password)
     {
         return email == Email && password == _password;
-    }
-
-    // TODO: AddPermission and RemovePermission probably should be moved into the PermissionManager class(?)
-    public void AddPermission(PermissionEnum permission)
-    {
-        _permission |= permission;
-    }
-
-    public void RemovePermission(PermissionEnum permission)
-    {
-        _permission &= ~permission;
-    }
-
-    public bool HasPermission(PermissionEnum permission)
-    {
-        return _permission.HasFlag(permission);
     }
 
     public string ToSaveString()

@@ -37,8 +37,6 @@ locations.Add(new Location("Varberg Clinic", RegionEnum.Halland.ToString()));
 locations.Add(new Location("Lund Hospital", RegionEnum.Skane.ToString()));
 locations.Add(new Location("Malmö Clinic", RegionEnum.Skane.ToString()));
 
-// Permissions perm = new Permissions("Max", PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions);
-
 InitiateRegionWithLocations(regions, locations);
 
 User? active_user = null;
@@ -103,6 +101,12 @@ while (running)
                     {
                         active_user = user;
 
+<<<<<<< HEAD
+=======
+                        //Eventslog to record that user logged in
+                        EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");
+
+>>>>>>> dbc3a24ce08aa51e2e6eef5974d9fb1ab89b9489
                         break;
                     }
                 }
@@ -198,11 +202,6 @@ Console.Clear();
 
                     }break;
             }
-
-
-
-
-
 
 // TODO: Implement location menu
 /*
