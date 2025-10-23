@@ -1,6 +1,6 @@
 namespace App;
 
-enum RegionEnum
+public enum RegionEnum
 {
     Skane,
     Halland
@@ -8,20 +8,20 @@ enum RegionEnum
 
 class Region
 {
-    public string Name;
+    public RegionEnum RegionName;
     public List<Location> Locations;
 
     // Konstruktor
-    public Region(RegionEnum name)
+    public Region(RegionEnum region)
     {
-        Name = name.ToString();
+        RegionName = region;
     }
 
     public void AddLocation(string locationName)
     {
-        Location newLocation = new Location(locationName, Name);
+        Location newLocation = new Location(locationName, RegionName);
         Locations.Add(newLocation);
-        Console.WriteLine("Location " + locationName + " has been added to the region " + Name + ".");
+        Console.WriteLine("Location " + locationName + " has been added to the region " + RegionName + ".");
     }
 
     public void InitLocations(List<Location> locations)
@@ -31,7 +31,7 @@ class Region
 
     public void ShowLocations()
     {
-        Console.WriteLine("Locations in regionen " + Name + ":");
+        Console.WriteLine("Locations in regionen " + RegionName + ":");
         if (Locations.Count == 0)
         {
             Console.WriteLine("No locations yet");
