@@ -1,5 +1,6 @@
 ﻿using App;
 using System.Diagnostics;
+using System.Globalization;
 
 List<User> users = new List<User>();
 
@@ -276,15 +277,59 @@ static string PasswordInput()
     return password_acc;
 }
 
-ColorizedPrint("Do the flip", ConsoleColor.DarkMagenta);
-string pass = PasswordInput();
+static bool IsValid(string personalNumber)
+{
+    return Validate(personalNumber);
+}
 
-ColorizedPrint($"Ha-ha I saw your password {pass}", ConsoleColor.DarkRed);
-// ConsoleKeyInfo key_pressed = Console.ReadKey(true);
-//
-// if (key_pressed.Key == ConsoleKey.Enter)
-// {
-//     ColorizedPrint("Enter pressed", ConsoleColor.Green);
-// }else{
-//     ColorizedPrint("Not enter", ConsoleColor.Red);
-// }
+static bool Validate(string personalNumber)
+{
+    if (personalNumber.Length != 13)
+    {
+        ColorizedPrint("Personal number must be in format YYYYMMDD-XXXX.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    if (personalNumber[8] != '-')
+    {
+        ColorizedPrint("Personal number must contain a dash (-) at position 9.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    string datePart = personalNumber.Substring(0, 8);
+    string lastFourDigits = personalNumber.Substring(9, 4);
+
+    if (!datePart.All(digit => char.IsDigit(digit)))
+    {
+        ColorizedPrint("The date part (YYYYMMDD) must contain only digits.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    if (!lastFourDigits.All(digit => char.IsDigit(digit)))
+    {
+        ColorizedPrint("The last 4 characters must be digits.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    if (!DateTime.TryParseExact(datePart, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None,
+            out DateTime birthDate))
+    {
+        ColorizedPrint("The date part is not a valid date.",  ConsoleColor.DarkRed);
+        return false;
+    }
+
+    if (birthDate > DateTime.Today)
+    {
+        ColorizedPrint("The birth date cannot be in the future.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    DateTime minDate = DateTime.Today.AddYears(-150);
+    if (birthDate < minDate)
+    {
+        ColorizedPrint("The birth date cannot be more than 150 years ago.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    return true;
+}
