@@ -1,5 +1,8 @@
 ﻿using App;
+
+
 using System.Diagnostics;
+using System.Globalization;
 
 List<User> users = new List<User>();
 List<Appointment> appointments = new List<Appointment>;
@@ -13,14 +16,17 @@ users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", R
 users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString(), 
     PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManegeRegistrationRequest));
 
-// Events record that new registration happened
-EventLog eventLog = new EventLog();
+// Record registration Event for each user
+foreach (var user in users)
+{
+    EventLog.AddEvent(user.FirstName, EventTypeEnum.RegistrationRequested,
+        $"New user {user.FirstName} registered in {user.RegionName}.");
+}
 
-EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
 
 
 List<Region> regions = new List<Region>();
-regions.Add(new Region(RegionEnum.Skane)); 
+regions.Add(new Region(RegionEnum.Skane));
 regions.Add(new Region(RegionEnum.Halland));
 
 static void InitiateRegionWithLocations(List<Region> regions, List<Location> locations)
@@ -38,8 +44,6 @@ locations.Add(new Location("Halmstad Hospital", RegionEnum.Halland.ToString()));
 locations.Add(new Location("Varberg Clinic", RegionEnum.Halland.ToString()));
 locations.Add(new Location("Lund Hospital", RegionEnum.Skane.ToString()));
 locations.Add(new Location("Malmö Clinic", RegionEnum.Skane.ToString()));
-
-// Permissions perm = new Permissions("Max", PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions | PermissionEnum.AssignToTheRegions);
 
 InitiateRegionWithLocations(regions, locations);
 
@@ -79,6 +83,9 @@ while (running)
                             Console.Write("Chose a region: ");
 
 
+                            //Eventslog to record that user logged in
+                            // EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");
+
                             break;
                     }
                 }
@@ -90,7 +97,7 @@ while (running)
                 Console.Write("Enter email: ");
                 string? email = Console.ReadLine();
                 Console.Write("Enter password: ");
-                string? password = Console.ReadLine();
+                string password = PasswordInput();
 
                 Console.Clear();
                 Debug.Assert(email != null);
@@ -103,7 +110,7 @@ while (running)
                         active_user = user;
 
                      //Eventslog to record that user logged in
-                     EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");              
+                     EventLog.AddEvent(active_user.FirstName, EventTypeEnum.Login, $"{active_user.FirstName} logged in.");              
 
                         break;
                     }
@@ -127,13 +134,13 @@ while (running)
                 Console.Write("Enter email: ");
                 string? email = Console.ReadLine();
                 Console.Write("Enter password: ");
-                string? password = Console.ReadLine();
+                string password = PasswordInput();
                 Console.Write("Enter regionName: ");
                 string? regionName = Console.ReadLine();
 
                 // Event record that new registration happened
 
-                EventLog.AddEvent(firstName, EventType.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
+                EventLog.AddEvent(firstName, EventTypeEnum.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
                
                
                 Console.Clear();
@@ -230,7 +237,7 @@ List<Appointment> appointments = new();
 
 static void RequestAppointment(string patientName, string locationName, string regionName)
 {
-    
+
 }
 
 
@@ -257,14 +264,9 @@ Console.Clear();
                             Console.ReadLine();
                         }
 
-                        
+
                     }break;
             }
-
-
-
-
-
 
 // TODO: Implement location menu
 /*
@@ -280,3 +282,117 @@ foreach (Location location in locations)
      Console.WriteLine("\nPress Enter to exit...");
      Console.ReadLine();
 */
+
+
+static void ColorizedPrint(string print_message, ConsoleColor foreground_color = ConsoleColor.White,
+    object background_color = null)
+{
+    if (background_color is ConsoleColor color)
+    {
+        Console.BackgroundColor = color;
+    }
+
+    Console.ForegroundColor = foreground_color;
+    Console.WriteLine(print_message);
+    Console.ResetColor();
+}
+
+static string StringUserInput()
+{
+    string? user_input = Console.ReadLine();
+    Debug.Assert(user_input != null);
+    return user_input;
+}
+
+static int IntUserInout()
+{
+    int.TryParse(Console.ReadLine(), out int user_input);
+    Debug.Assert(user_input != null);
+    return user_input;
+}
+
+
+static string PasswordInput()
+{
+    string password_acc = "";
+    ConsoleKeyInfo key_pressed;
+    while (true)
+    {
+        key_pressed = Console.ReadKey(true);
+        if (key_pressed.Key.Equals(ConsoleKey.Enter))
+        {
+            ColorizedPrint("Enter pressed", ConsoleColor.Green);
+            break;
+        }
+        else if (key_pressed.Key.Equals(ConsoleKey.Backspace))
+        {
+            if (password_acc.Length > 0)
+            {
+                password_acc = password_acc.Substring(0, password_acc.Length - 1);
+            }
+        }
+        else
+        {
+            password_acc += key_pressed.KeyChar;
+        }
+    }
+
+    return password_acc;
+}
+
+static bool IsValid(string personalNumber)
+{
+    return Validate(personalNumber);
+}
+
+static bool Validate(string personalNumber)
+{
+    if (personalNumber.Length != 13)
+    {
+        ColorizedPrint("Personal number must be in format YYYYMMDD-XXXX.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    if (personalNumber[8] != '-')
+    {
+        ColorizedPrint("Personal number must contain a dash (-) at position 9.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    string datePart = personalNumber.Substring(0, 8);
+    string lastFourDigits = personalNumber.Substring(9, 4);
+
+    if (!datePart.All(digit => char.IsDigit(digit)))
+    {
+        ColorizedPrint("The date part (YYYYMMDD) must contain only digits.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    if (!lastFourDigits.All(digit => char.IsDigit(digit)))
+    {
+        ColorizedPrint("The last 4 characters must be digits.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    if (!DateTime.TryParseExact(datePart, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None,
+            out DateTime birthDate))
+    {
+        ColorizedPrint("The date part is not a valid date.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    if (birthDate > DateTime.Today)
+    {
+        ColorizedPrint("The birth date cannot be in the future.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    DateTime minDate = DateTime.Today.AddYears(-150);
+    if (birthDate < minDate)
+    {
+        ColorizedPrint("The birth date cannot be more than 150 years ago.", ConsoleColor.DarkRed);
+        return false;
+    }
+
+    return true;
+}
