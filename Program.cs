@@ -1,28 +1,52 @@
 ﻿using App;
-
-
 using System.Diagnostics;
 using System.Globalization;
 
 List<User> users = new List<User>();
-List<Appointment> appointments = new List<Appointment>;
+List<Appointment> appointments = new List<Appointment>();
 
-users.Add(new User("Loyd", "Lastname", 26, 19992208, "email@gmail.com", "pass", RegionEnum.Halland.ToString(),
-    PermissionEnum.MenagePermissions | PermissionEnum.AssignToTheRegions | PermissionEnum.CreatePersonnelAccount | PermissionEnum.ShowPermissionsList));
-users.Add(new User("Max", "Lastname", 26, 19992208, "gmail@gmail.com", "pass", RegionEnum.Halland.ToString(), 
-    PermissionEnum.ManegeRegistrationRequest | PermissionEnum.AddLocations | PermissionEnum.ShowPatiensJournalEntries));
-users.Add(new User("Lina", "Lastname", 26, 19992208, "lina@gmail.com", "pass", RegionEnum.Halland.ToString(), 
-    PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManegeRegistrationRequest));
-users.Add(new User("Nick", "Lastname", 26, 19992208, "none@gmail.com", "pass", RegionEnum.Halland.ToString(), 
-    PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManegeRegistrationRequest));
+users.Add(new User("19840815-2344", RegionEnum.Halland, "pass", PermissionEnum.ManagePermissions |
+                                                                PermissionEnum.AssignToTheRegions |
+                                                                PermissionEnum.CreatePersonnelAccount |
+                                                                PermissionEnum.ShowPermissionList));
+
+users.Add(new User("19931107-3521", RegionEnum.Halland, "pass", PermissionEnum.ManageRegistrationRequest |
+                                                                PermissionEnum.AddLocations |
+                                                                PermissionEnum.ShowPatientJournalEntities));
+
+users.Add(new User("20010322-6541", RegionEnum.Skane, "pass",
+    PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManageRegistrationRequest));
+
+users.Add(new User("19951201-0142", RegionEnum.Skane, "pass",
+    PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManageRegistrationRequest));
+ColorizedPrint("All users:");
+ColorizedPrint("------------------", ConsoleColor.Cyan);
+int index = 0;
+foreach (User user in users)
+{
+    index++;
+    ColorizedPrint($"{user.FirstName}", ConsoleColor.Gray);
+    ColorizedPrint($"{user.LastName}", ConsoleColor.Gray);
+    ColorizedPrint($"{user.Gender}", ConsoleColor.Gray);
+    ColorizedPrint($"{user.BirthDate}", ConsoleColor.Gray);
+    ColorizedPrint($"{user.Email}", ConsoleColor.Gray);
+    ColorizedPrint($"{user.PhoneNumber}", ConsoleColor.Gray);
+    ColorizedPrint($"{user.Region}", ConsoleColor.Gray);
+    if (index != users.Count)
+    {
+        ColorizedPrint("------------------", ConsoleColor.DarkMagenta);
+    }
+}
+
+ColorizedPrint("------------------", ConsoleColor.Cyan);
+
 
 // Record registration Event for each user
 foreach (var user in users)
 {
     EventLog.AddEvent(user.FirstName, EventTypeEnum.RegistrationRequested,
-        $"New user {user.FirstName} registered in {user.RegionName}.");
+        $"New user {user.FirstName} registered in {user.Region}.");
 }
-
 
 
 List<Region> regions = new List<Region>();
@@ -33,17 +57,17 @@ static void InitiateRegionWithLocations(List<Region> regions, List<Location> loc
 {
     foreach (Region region in regions)
     {
-        List<Location> region_locations = locations.FindAll(location => location.BelongsToRegion == region.Name);
+        List<Location> region_locations = locations.FindAll(location => location.BelongsToRegion == region.RegionName);
         region.InitLocations(region_locations);
     }
 }
 
 List<Location> locations = new List<Location>();
 
-locations.Add(new Location("Halmstad Hospital", RegionEnum.Halland.ToString()));
-locations.Add(new Location("Varberg Clinic", RegionEnum.Halland.ToString()));
-locations.Add(new Location("Lund Hospital", RegionEnum.Skane.ToString()));
-locations.Add(new Location("Malmö Clinic", RegionEnum.Skane.ToString()));
+locations.Add(new Location("Halmstad Hospital", RegionEnum.Halland));
+locations.Add(new Location("Varberg Clinic", RegionEnum.Halland));
+locations.Add(new Location("Lund Hospital", RegionEnum.Skane));
+locations.Add(new Location("Malmö Clinic", RegionEnum.Skane));
 
 InitiateRegionWithLocations(regions, locations);
 
@@ -58,173 +82,176 @@ while (running)
     switch (menu)
     {
         case Menu.None:
+        {
+            if (active_user == null)
             {
-                if (active_user == null)
+                Console.WriteLine("1. Register");
+                Console.WriteLine("2. Login");
+                Console.WriteLine("3. Quit");
+                Console.Write("Choose an option: ");
+
+                switch (Console.ReadLine())
                 {
-                    Console.WriteLine("1. Register");
-                    Console.WriteLine("2. Login");
-                    Console.WriteLine("3. Quit");
-                    Console.Write("Choose an option: ");
-
-                    switch (Console.ReadLine())
-                    {
-                        case "1": menu = Menu.Register; break;
-                        case "2": menu = Menu.Login; break;
-                        case "3": running = false; break;
-                    }
-                }
-                else
-                {
-                    switch (Console.ReadLine())
-                    {
-                        case "1":
-                        case "Add Location":
-                            Console.Clear();
-                            Console.Write("Chose a region: ");
-
-
-                            //Eventslog to record that user logged in
-                            // EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");
-
-                            break;
-                    }
+                    case "1": menu = Menu.Register; break;
+                    case "2": menu = Menu.Login; break;
+                    case "3": running = false; break;
                 }
             }
-            break;
-        case Menu.Login:
+            else
             {
-                Console.Clear();
-                Console.Write("Enter email: ");
-                string? email = Console.ReadLine();
-                Console.Write("Enter password: ");
-                string password = PasswordInput();
-
-                Console.Clear();
-                Debug.Assert(email != null);
-                Debug.Assert(password != null);
-
-                foreach (User user in users)
+                switch (Console.ReadLine())
                 {
-                    if (user.TryLogin(email, password))
-                    {
-                        active_user = user;
+                    case "1":
+                    case "Add Location":
+                        Console.Clear();
+                        Console.Write("Chose a region: ");
 
-                     //Eventslog to record that user logged in
-                     EventLog.AddEvent(active_user.FirstName, EventTypeEnum.Login, $"{active_user.FirstName} logged in.");              
+
+                        //Eventslog to record that user logged in
+                        // EventLog.AddEvent(active_user.FirstName, EventType.Login, $"{active_user.FirstName} logged in.");
 
                         break;
-                    }
                 }
-
-                menu = Menu.Main;
             }
+        }
+            break;
+        case Menu.Login:
+        {
+            Console.Clear();
+            Console.Write("Enter email: ");
+            string? email = Console.ReadLine();
+            Console.Write("Enter password: ");
+            string password = PasswordInput();
+
+            Console.Clear();
+            Debug.Assert(email != null);
+            Debug.Assert(password != null);
+
+            foreach (User user in users)
+            {
+                if (user.TryLogin(email, password))
+                {
+                    active_user = user;
+
+                    //Eventslog to record that user logged in
+                    EventLog.AddEvent(active_user.FirstName, EventTypeEnum.Login,
+                        $"{active_user.FirstName} logged in.");
+
+                    break;
+                }
+            }
+
+            menu = Menu.Main;
+        }
             break;
 
         case Menu.Register:
+        {
+            Console.Clear();
+            Console.Write("Enter Social Security Number: ");
+            string socialSecurityNumber = StringUserInput();
+            bool is_valid_ssn = IsValid(socialSecurityNumber);
+
+            if (!is_valid_ssn)
             {
-                Console.Clear();
-                Console.Write("Enter firstname: ");
-                string? firstName = Console.ReadLine();
-                Console.Write("Enter lastname: ");
-                string? lastName = Console.ReadLine();
-                Console.Write("Enter Date of birth: ");
-                int dateOfBirth = int.Parse(Console.ReadLine());
-                Console.Write("Enter Social Security Number: ");
-                int socialSecurityNumber = int.Parse(Console.ReadLine());
-                Console.Write("Enter email: ");
-                string? email = Console.ReadLine();
-                Console.Write("Enter password: ");
-                string password = PasswordInput();
-                Console.Write("Enter regionName: ");
-                string? regionName = Console.ReadLine();
-
-                // Event record that new registration happened
-
-                EventLog.AddEvent(firstName, EventTypeEnum.RegistrationRequested, $"New user {firstName} registered in {regionName}.");
-               
-               
-                Console.Clear();
-                Debug.Assert(firstName != null);
-                Debug.Assert(lastName != null);
-                Debug.Assert(dateOfBirth != null);
-                Debug.Assert(socialSecurityNumber != null);
-                Debug.Assert(email != null);
-                Debug.Assert(password != null);
-                Debug.Assert(regionName != null);
-
-                users.Add(new User(firstName, lastName, dateOfBirth, socialSecurityNumber, email, password, regionName));
-
-
-
-                // TODO: add saving file code here
-
-                menu = Menu.Main;
+                Console.WriteLine("Press any key to try again, or press escape to exit");
+                ConsoleKeyInfo key = Console.ReadKey();
+                if (key.Key.Equals(ConsoleKey.Escape))
+                {
+                    ColorizedPrint("Escape pressed", ConsoleColor.DarkGreen);
+                    menu = Menu.None;
+                    break;
+                }
+                else
+                {
+                    break;
+                }
             }
+
+            Console.Write("Enter password: ");
+            string password = PasswordInput();
+
+
+            EventLog.AddEvent(socialSecurityNumber, EventTypeEnum.RegistrationRequested,
+                $"Registration attempt for user with social security number {socialSecurityNumber}.");
+
+
+            // TODO: add saving file code here
+
+            // menu = Menu.Main;
+        }
             break;
 
         case Menu.Main:
+        {
+            Console.Clear();
+            Console.WriteLine($"Welcome {active_user.FirstName}!");
+            Console.WriteLine("\n---------------------------------");
+
+            // Show only the options the Logged-in User has access to
+            if (active_user.HasPermission(PermissionEnum.ManageAppointments))
             {
-               Console.Clear();
-               Console.WriteLine($"Welcome {active_user.FisrtName}!");
-                Console.WriteLine("\n---------------------------------");
-
-               // Show only the options the Logged-in User has access to
-               if (active_user.HasPermission(PermissionEnum.ManageAppointments))
-               {
                 Console.WriteLine("\n1. Manage Appointments (Modify, Accept or Deny)");
-               }
-               if if (active_user.HasPermission(PermissionEnum.ViewTheSchedule))
-               {
+            }
+
+            if (active_user.HasPermission(PermissionEnum.ViewTheSchedule))
+            {
                 Console.WriteLine("\n2. View a Location Schedule");
-               }
-               if (active_user.HasPermission(PermissionEnum.ManageRegistrationRequest))
-               {
+            }
+
+            if (active_user.HasPermission(PermissionEnum.ManageRegistrationRequest))
+            {
                 Console.WriteLine("\n3. Manage Patients Registration (Accept or Deny)");
-               }
-                if (active_user.HasPermission(PermissionEnum.ManagePermissions))
-               {
+            }
+
+            if (active_user.HasPermission(PermissionEnum.ManagePermissions))
+            {
                 Console.WriteLine("\n4. Manage User Permissions");
-               }
-                if (active_user.HasPermission(PermissionEnum.AddLocations))
-               {
+            }
+
+            if (active_user.HasPermission(PermissionEnum.AddLocations))
+            {
                 Console.WriteLine("\n5. Add Location");
-               }
-               if (active_user.HasPermission(PermissionEnum.AssignToTheRegions))
-               {
+            }
+
+            if (active_user.HasPermission(PermissionEnum.AssignToTheRegions))
+            {
                 Console.WriteLine("\n6. Assign to the Regions");
-               }
-               if (active_user.HasPermission(PermissionEnum.CreatePersonnelAccount))
-               {
+            }
+
+            if (active_user.HasPermission(PermissionEnum.CreatePersonnelAccount))
+            {
                 Console.WriteLine("\n7. Create Personnel Account");
-               }
-               if (active_user.HasPermission(PermissionEnum.ShowPermissionList))
-               {
+            }
+
+            if (active_user.HasPermission(PermissionEnum.ShowPermissionList))
+            {
                 Console.WriteLine("\n8. Show Permissions List");
-               }
-               if (active_user.HasPermission(PermissionEnum.ShowPatientJournalEnteries))
-               {
+            }
+
+            if (active_user.HasPermission(PermissionEnum.ShowPatientJournalEntities))
+            {
                 Console.WriteLine("\n9. Show Patient Journal Enteries");
-               }
+            }
 
-               Console.WriteLine("10. Logout");
-               Console.WriteLine("11. Quit");
-               Console.Write("Choose an option: ");
+            Console.WriteLine("10. Logout");
+            Console.WriteLine("11. Quit");
+            Console.Write("Choose an option: ");
 
-               switch (Console.ReadLine())
-               {
-
+            switch (Console.ReadLine())
+            {
                 case "1":
                     if (active_user.HasPermission(PermissionEnum.ManageAppointments))
                     {
-                        Console.WriteLine("ENTER what you want to do: "Accept" or "Deny"?)");
+                        Console.WriteLine("ENTER what you want to do: \"Accept\" or \"Deny\"?)");
                         if (Console.ReadLine() == "Accept")
                         {
-
                         }
                     }
 
-               }
+                    break;
             }
+        }
             break;
     }
 }

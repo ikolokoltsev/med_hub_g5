@@ -7,7 +7,6 @@ approve appointment request, and
 List<Event>
 */
 
-
 namespace App;
 
 enum EventTypeEnum
@@ -17,6 +16,7 @@ enum EventTypeEnum
     AppointmentDenied,
     AppointmentModified,
     AppointmentApproved,
+    AppointmentRegistered,
     PermissionGranted,
     LocationAdded,
     JournalViewed,
@@ -26,7 +26,7 @@ enum EventTypeEnum
 // Represents one single event record
 class EventLog
 {
-    string User;
+    string User; // we will use SSN
     EventTypeEnum EventType;
     string Description;
 
@@ -38,14 +38,12 @@ class EventLog
     }
 
     private static List<EventRecord> events = new List<EventRecord>();
-
-    // Add an event to the list
+    
     public static void AddEvent(string user, EventTypeEnum type, string description)
     {
         events.Add(new EventRecord(user, type, description, DateTime.Now));
     }
 
-    // Show all events in the console
     public static void ShowAllEvents()
 
     {
@@ -61,8 +59,6 @@ class EventLog
         }
     }
 
-
-    // Small helper class to store one event record
     class EventRecord
     {
         public string User;
