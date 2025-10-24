@@ -79,7 +79,7 @@ public class Menu
             }
         }
     }
-    
+
     public int ShowSelectionMenu()
     {
         while (true)
@@ -117,6 +117,12 @@ public class Menu
                     _selectedIndex = (_selectedIndex + 1 + _items.Count) % _items.Count;
                     break;
                 case ConsoleKey.Enter:
+                    MenuItem selected_item = _items[_selectedIndex];
+                    if (selected_item.Action != null)
+                    {
+                        selected_item.Action();
+                    }
+
                     return _selectedIndex;
                 case ConsoleKey.Escape:
                     return -1;

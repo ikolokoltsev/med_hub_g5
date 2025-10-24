@@ -3,8 +3,8 @@ namespace App;
 public enum RegistrationStatusEnum
 {
     Pending,
-    Completed,
-    Denied,
+    Confirmed,
+    Rejected,
 }
 
 class RegistrationRequest
@@ -21,5 +21,10 @@ class RegistrationRequest
         _password = password;
         Region = region;
         Status = status;
+    }
+
+    public string GetPassword()
+    {
+        return _password;
     }
 }
