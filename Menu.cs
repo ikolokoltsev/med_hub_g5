@@ -39,7 +39,7 @@ public class Menu
                 if (menu_item == _selectedIndex)
                 {
                     Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine($"  > {_items[menu_item].Title} <");
                     Console.ResetColor();
                 }
@@ -49,7 +49,7 @@ public class Menu
                 }
             }
 
-            Console.WriteLine("Use arrow up, and arrow down to navigate the menu, Enter to select and esc to exit.");
+            Console.WriteLine("\nUse arrow up, and arrow down to navigate the menu, Enter to select and esc to exit.");
 
             ConsoleKeyInfo key_pressed = Console.ReadKey(true);
 
@@ -94,7 +94,7 @@ public class Menu
                 if (menu_item == _selectedIndex)
                 {
                     Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine($"  > {_items[menu_item].Title} <");
                     Console.ResetColor();
                 }
@@ -104,7 +104,7 @@ public class Menu
                 }
             }
 
-            Console.WriteLine("Use arrow up, and arrow down to navigate, Enter to select and esc to cancel.");
+            Console.WriteLine("\nUse arrow up, and arrow down to navigate, Enter to select and esc to cancel.");
 
             ConsoleKeyInfo key_pressed = Console.ReadKey(true);
 
