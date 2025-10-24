@@ -1,29 +1,25 @@
 namespace App;
 
-enum RegistartonstatusEnum
+public enum RegistrationStatusEnum
 {
-    pending, // The User awaits a confirmation
-    completed, // The resgitration is approved by admin
-    Denied, // the application for an account has been denied,
+    Pending,
+    Completed,
+    Denied,
 }
 
 class RegistrationRequest
 {
-    public string Email;
-    public string Region;
-    public string Password;
-    public string Name;
-    public string LastName;
+    public string SocialSecurityNumber;
+    string _password;
+    public RegionEnum Region;
+    public RegistrationStatusEnum Status;
 
-
-    public RegistrationRequest(string email, string name, string lname, string password, string region)
+    public RegistrationRequest(string socialSecurityNumber, string password, RegionEnum region,
+        RegistrationStatusEnum status = RegistrationStatusEnum.Pending)
     {
-        Email = email;
-        Name = name;
-        Password = password;
+        SocialSecurityNumber = socialSecurityNumber;
+        _password = password;
         Region = region;
-        LastName = lname;
-
+        Status = status;
     }
-
-} 
+}
