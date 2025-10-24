@@ -79,4 +79,48 @@ public class Menu
             }
         }
     }
+    
+    public int ShowSelectionMenu()
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.CursorVisible = false;
+
+            Console.WriteLine(_title);
+
+            for (int menu_item = 0; menu_item < _items.Count; menu_item++)
+            {
+                if (menu_item == _selectedIndex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine($"  > {_items[menu_item].Title} <");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.WriteLine($"  {_items[menu_item].Title}");
+                }
+            }
+
+            Console.WriteLine("Use arrow up, and arrow down to navigate, Enter to select and esc to cancel.");
+
+            ConsoleKeyInfo key_pressed = Console.ReadKey(true);
+
+            switch (key_pressed.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    _selectedIndex = (_selectedIndex - 1 + _items.Count) % _items.Count;
+                    break;
+                case ConsoleKey.DownArrow:
+                    _selectedIndex = (_selectedIndex + 1 + _items.Count) % _items.Count;
+                    break;
+                case ConsoleKey.Enter:
+                    return _selectedIndex;
+                case ConsoleKey.Escape:
+                    return -1;
+            }
+        }
+    }
 }
