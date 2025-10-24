@@ -20,6 +20,8 @@ users.Add(new User("20010322-6541", RegionEnum.Skane, "pass",
 users.Add(new User("19951201-0142", RegionEnum.Skane, "pass",
     PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManageRegistrationRequest));
 
+List<RegistrationRequest> registration_requests = new List<RegistrationRequest>();
+
 // Record registration Event for each user
 foreach (var user in users)
 {
@@ -61,21 +63,18 @@ Menu main_menu = new Menu("Welcome to the MedHub", new List<MenuItem>
         active_user = null;
         Console.CursorVisible = true;
         Console.Write("Enter Social Security Number: ");
-        string? email = Console.ReadLine();
+        string social_security_number = StringUserInput();
         Console.Write("Enter password: ");
         string password = PasswordInput();
 
         Console.Clear();
-        Debug.Assert(email != null);
-        Debug.Assert(password != null);
 
         foreach (User user in users)
         {
-            if (user.TryLogin(email, password))
+            if (user.TryLogin(social_security_number, password))
             {
                 active_user = user;
 
-                //Eventslog to record that user logged in
                 EventLog.AddEvent(active_user.FirstName, EventTypeEnum.Login,
                     $"{active_user.FirstName} logged in.");
 
@@ -122,18 +121,58 @@ Menu main_menu = new Menu("Welcome to the MedHub", new List<MenuItem>
             {
                 Console.Write("Enter password: ");
                 string password = PasswordInput();
+                RegionEnum region = ShowRegionOptions();
 
-                EventLog.AddEvent(socialSecurityNumber, EventTypeEnum.RegistrationRequested,
-                    $"Registration attempt for user with social security number {socialSecurityNumber}.");
+                bool is_user_exists = users.Any(user => user.SocialSecurityNumber == socialSecurityNumber);
+                bool is_registration_exists = registration_requests.Any(registration_request =>
+                    registration_request.SocialSecurityNumber == socialSecurityNumber &&
+                    registration_request.Status == RegistrationStatusEnum.Pending);
+                if (is_user_exists || is_registration_exists)
+                {
+                    ColorizedPrint("You can't register with this credentials.", ConsoleColor.DarkRed);
+                    ColorizedPrint("Press any key to continue...", ConsoleColor.DarkRed);
+                    Console.ReadKey();
+                }
+                else
+                {
+                    Console.Clear();
+                    registration_requests.Add(new RegistrationRequest(socialSecurityNumber, password,
+                        region));
+                    ColorizedPrint($"Selected region {region}", ConsoleColor.DarkGreen);
+                    EventLog.AddEvent(socialSecurityNumber, EventTypeEnum.RegistrationRequested,
+                        $"Registration attempt for user with social security number {socialSecurityNumber}.");
+                    ColorizedPrint("Congratulations! Your registration request was sent", ConsoleColor.DarkGreen);
+                    ColorizedPrint("Press any key to continue...", ConsoleColor.DarkGreen);
+                    Console.ReadKey();
+                }
 
                 return;
             }
         }
     }),
-    new MenuItem("Exit", null
-    )
+    new MenuItem("Exit", null)
 });
 
+RegionEnum ShowRegionOptions()
+{
+    List<MenuItem> region_options = new List<MenuItem>();
+    foreach (RegionEnum region in RegionEnum.GetValues(typeof(RegionEnum)))
+    {
+        RegionEnum captured_region = region;
+        region_options.Add(new MenuItem($"{region}", null));
+    }
+
+    Menu region_options_menu = new Menu("Region Options", region_options);
+    int selectedIndex = region_options_menu.ShowSelectionMenu();
+
+    if (selectedIndex == -1)
+    {
+        return RegionEnum.Halland;
+    }
+
+    string selectedTitle = region_options[selectedIndex].Title;
+    return (RegionEnum)Enum.Parse(typeof(RegionEnum), selectedTitle);
+}
 
 void ShowUserMenu(User user)
 {
@@ -163,7 +202,16 @@ void ShowUserMenu(User user)
         user_menu_items.Add(new MenuItem("Registration requests",
             () =>
             {
-                ColorizedPrint("You can manage registrations requests here");
+                foreach (RegistrationRequest registration_request in registration_requests)
+                {
+                    ColorizedPrint("----------------------------", ConsoleColor.Gray);
+                    ColorizedPrint($"{registration_request.SocialSecurityNumber}");
+                    ColorizedPrint($"{registration_request.Region}");
+                    ColorizedPrint($"{registration_request.Status}");
+                }
+
+                ColorizedPrint("----------------------------", ConsoleColor.Gray);
+
                 Console.ReadKey(true);
             }));
     }
@@ -237,7 +285,6 @@ void ShowUserMenu(User user)
 main_menu.ShowMenu();
 
 
-
 static void ColorizedPrint(string print_message, ConsoleColor foreground_color = ConsoleColor.White,
     object background_color = null)
 {
@@ -275,7 +322,6 @@ static string PasswordInput()
         key_pressed = Console.ReadKey(true);
         if (key_pressed.Key.Equals(ConsoleKey.Enter))
         {
-            ColorizedPrint("Enter pressed", ConsoleColor.Green);
             break;
         }
         else if (key_pressed.Key.Equals(ConsoleKey.Backspace))
