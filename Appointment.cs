@@ -5,8 +5,6 @@ public enum AppointmentStatusEnum
     Pending,
     Completed,
     Cancelled,
-    Accepted,
-    Rejected,
 }
 
 class Appointment
@@ -29,19 +27,19 @@ class Appointment
             $"Appointment registered at {location} on {dateAndTime}.");
     }
 
-    public void Accept(User approver)
-    {
-        Status = AppointmentStatusEnum.Accepted;
-        EventLog.AddEvent(approver.SocialSecurityNumber, EventTypeEnum.AppointmentApproved,
-            $"Appointment registered by {BookedBy.SocialSecurityNumber} at {LocationName}.");
-    }
-
-    public void Deny(User approver)
-    {
-        Status = AppointmentStatusEnum.Rejected;
-        EventLog.AddEvent(approver.SocialSecurityNumber, EventTypeEnum.AppointmentDenied,
-            $"Denied appointment for {BookedBy.SocialSecurityNumber} at {LocationName}.");
-    }
+    // public void Accept(User approver)
+    // {
+    //     Status = AppointmentStatusEnum.Accepted;
+    //     EventLog.AddEvent(approver.SocialSecurityNumber, EventTypeEnum.AppointmentApproved,
+    //         $"Appointment registered by {BookedBy.SocialSecurityNumber} at {LocationName}.");
+    // }
+    //
+    // public void Deny(User approver)
+    // {
+    //     Status = AppointmentStatusEnum.Rejected;
+    //     EventLog.AddEvent(approver.SocialSecurityNumber, EventTypeEnum.AppointmentDenied,
+    //         $"Denied appointment for {BookedBy.SocialSecurityNumber} at {LocationName}.");
+    // }
 
     public string ToDisplayString()
     {

@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Globalization;
 
 List<User> users = new List<User>();
-List<Appointment> appointments = new List<Appointment>();
 
 users.Add(new User("19840815-2344", RegionEnum.Halland, "pass", PermissionEnum.ManagePermissions |
                                                                 PermissionEnum.AssignToTheRegions |
@@ -20,9 +19,8 @@ users.Add(new User("20010322-6541", RegionEnum.Skane, "pass",
 users.Add(new User("19951201-0142", RegionEnum.Skane, "pass",
     PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManageRegistrationRequest));
 
-List<RegistrationRequest> registration_requests = new List<RegistrationRequest>();
 
-// Record registration Event for each user
+
 foreach (var user in users)
 {
     EventLog.AddEvent(user.FirstName, EventTypeEnum.RegistrationRequested,
@@ -51,6 +49,14 @@ locations.Add(new Location("Lund Hospital", RegionEnum.Skane));
 locations.Add(new Location("Malmö Clinic", RegionEnum.Skane));
 
 InitiateRegionWithLocations(regions, locations);
+
+List<Appointment> appointments = new List<Appointment>();
+
+List<RegistrationRequest> registration_requests = new List<RegistrationRequest>();
+
+
+List<AppointmentRequest> appointment_requests = new List<AppointmentRequest>();
+
 
 User? active_user = null;
 
@@ -153,7 +159,39 @@ Menu main_menu = new Menu("Welcome to the MedHub", new List<MenuItem>
     new MenuItem("Exit", null)
 });
 
-void registrationRequestManagement(RegistrationRequest registration_request, RegionEnum region)
+void BookAppointment(string location)
+{
+    List<MenuItem> book_appointment_options = new List<MenuItem>
+    {
+        new MenuItem("Yes",
+            () =>
+            {
+                appointment_requests.Add(new AppointmentRequest(active_user.SocialSecurityNumber, active_user.Region,
+                    location));
+            }),
+        new MenuItem("No", null)
+    };
+
+    Menu book_appointment_menu =
+        new Menu($"Do you want to book an appointment in {location}?", book_appointment_options);
+    book_appointment_menu.ShowSelectionMenu();
+}
+
+void ChoseAppointmentLocation(RegionEnum user_region)
+{
+    List<MenuItem> chose_appointment_location_options = new List<MenuItem>();
+    List<Location> user_locations = regions.Find(region => region.RegionName == user_region).Locations;
+    foreach (Location location in user_locations)
+    {
+        chose_appointment_location_options.Add(new MenuItem($"{location.Name}",
+            () => { BookAppointment(location.Name); }));
+    }
+
+    Menu chose_appointment_location_menu = new Menu("Book an appointment", chose_appointment_location_options);
+    chose_appointment_location_menu.ShowMenu();
+}
+
+void RegistrationRequestManagement(RegistrationRequest registration_request, RegionEnum region)
 {
     List<MenuItem> reg_req_management_options = new List<MenuItem>()
     {
@@ -188,7 +226,7 @@ void ShowRegistrationRequestsOptions(RegionEnum region)
         foreach (RegistrationRequest request in registration_requests_by_region)
         {
             registration_options.Add(new MenuItem($"{request.SocialSecurityNumber}",
-                () => { registrationRequestManagement(request, region); }));
+                () => { RegistrationRequestManagement(request, region); }));
         }
     }
     else
@@ -224,6 +262,14 @@ RegionEnum ShowRegionOptions()
 void ShowUserMenu(User user)
 {
     List<MenuItem> user_menu_items = new List<MenuItem>();
+    user_menu_items.Add(new MenuItem("View my journal", () =>
+    {
+        ColorizedPrint("You can view your journal here");
+        Console.ReadKey(true);
+    }));
+
+    user_menu_items.Add(new MenuItem("Book an appointment", () => { ChoseAppointmentLocation(user.Region); }));
+
     if (user.HasPermission(PermissionEnum.ManageAppointments))
     {
         user_menu_items.Add(new MenuItem("Manage Appointments",
