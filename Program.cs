@@ -153,6 +153,53 @@ Menu main_menu = new Menu("Welcome to the MedHub", new List<MenuItem>
     new MenuItem("Exit", null)
 });
 
+void registrationRequestManagement(RegistrationRequest registration_request, RegionEnum region)
+{
+    List<MenuItem> reg_req_management_options = new List<MenuItem>()
+    {
+        new MenuItem("Confirm", () =>
+        {
+            registration_request.Status = RegistrationStatusEnum.Confirmed;
+            users.Add(new User(registration_request.SocialSecurityNumber, region, registration_request.GetPassword()));
+            ColorizedPrint("Confirmed registration", ConsoleColor.DarkGreen);
+            ColorizedPrint("Press any key to continue...", ConsoleColor.DarkGreen);
+            Console.ReadKey();
+        }),
+        new MenuItem("Reject", () =>
+        {
+            registration_request.Status = RegistrationStatusEnum.Rejected;
+            ColorizedPrint("Rejected registration", ConsoleColor.DarkRed);
+            ColorizedPrint("Press any key to continue...", ConsoleColor.DarkRed);
+            Console.ReadKey();
+        }),
+    };
+    Menu reg_req_management_menu = new Menu("Registration Requests management", reg_req_management_options);
+    reg_req_management_menu.ShowSelectionMenu();
+}
+
+void ShowRegistrationRequestsOptions(RegionEnum region)
+{
+    List<MenuItem> registration_options = new List<MenuItem>();
+    List<RegistrationRequest> registration_requests_by_region =
+        registration_requests.FindAll(request =>
+            request.Region == region && request.Status == RegistrationStatusEnum.Pending);
+    if (registration_requests_by_region.Count != 0)
+    {
+        foreach (RegistrationRequest request in registration_requests_by_region)
+        {
+            registration_options.Add(new MenuItem($"{request.SocialSecurityNumber}",
+                () => { registrationRequestManagement(request, region); }));
+        }
+    }
+    else
+    {
+        registration_options.Add(new MenuItem("No registration requests found. Go back.", null));
+    }
+
+    Menu registrations_request_menu = new Menu("Registration requests", registration_options);
+    registrations_request_menu.ShowMenu();
+}
+
 RegionEnum ShowRegionOptions()
 {
     List<MenuItem> region_options = new List<MenuItem>();
@@ -200,20 +247,7 @@ void ShowUserMenu(User user)
     if (user.HasPermission(PermissionEnum.ManageRegistrationRequest))
     {
         user_menu_items.Add(new MenuItem("Registration requests",
-            () =>
-            {
-                foreach (RegistrationRequest registration_request in registration_requests)
-                {
-                    ColorizedPrint("----------------------------", ConsoleColor.Gray);
-                    ColorizedPrint($"{registration_request.SocialSecurityNumber}");
-                    ColorizedPrint($"{registration_request.Region}");
-                    ColorizedPrint($"{registration_request.Status}");
-                }
-
-                ColorizedPrint("----------------------------", ConsoleColor.Gray);
-
-                Console.ReadKey(true);
-            }));
+            () => { ShowRegistrationRequestsOptions(user.Region); }));
     }
 
     if (user.HasPermission(PermissionEnum.ManagePermissions))
@@ -305,7 +339,7 @@ static string StringUserInput()
     return user_input;
 }
 
-static int IntUserInout()
+static int IntUserInput()
 {
     int.TryParse(Console.ReadLine(), out int user_input);
     Debug.Assert(user_input != null);
