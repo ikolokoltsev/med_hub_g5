@@ -7,18 +7,25 @@ List<User> users = new List<User>();
 users.Add(new User("19840815-2344", RegionEnum.Halland, "pass", PermissionEnum.ManagePermissions |
                                                                 PermissionEnum.AssignToTheRegions |
                                                                 PermissionEnum.CreatePersonnelAccount |
-                                                                PermissionEnum.ShowPermissionList));
+                                                                PermissionEnum.ShowPermissionList |
+                                                                PermissionEnum.AddLocations |
+                                                                PermissionEnum.HandleRegions |
+                                                                PermissionEnum.ManageAppointments |
+                                                                PermissionEnum.ManageRegistrationRequest |
+                                                                PermissionEnum.MarkJournalEntitiesLevel |
+                                                                PermissionEnum.ShowPatientJournalEntities |
+                                                                PermissionEnum.ViewTheSchedule));
 
 users.Add(new User("19931107-3521", RegionEnum.Halland, "pass", PermissionEnum.ManageRegistrationRequest |
                                                                 PermissionEnum.AddLocations |
-                                                                PermissionEnum.ShowPatientJournalEntities));
+                                                                PermissionEnum.ShowPatientJournalEntities |
+                                                                PermissionEnum.ManageAppointments));
 
 users.Add(new User("20010322-6541", RegionEnum.Skane, "pass",
     PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManageRegistrationRequest));
 
 users.Add(new User("19951201-0142", RegionEnum.Skane, "pass",
     PermissionEnum.ViewTheSchedule | PermissionEnum.ManageAppointments | PermissionEnum.ManageRegistrationRequest));
-
 
 
 foreach (var user in users)
@@ -53,7 +60,6 @@ InitiateRegionWithLocations(regions, locations);
 List<Appointment> appointments = new List<Appointment>();
 
 List<RegistrationRequest> registration_requests = new List<RegistrationRequest>();
-
 
 List<AppointmentRequest> appointment_requests = new List<AppointmentRequest>();
 
@@ -243,7 +249,6 @@ RegionEnum ShowRegionOptions()
     List<MenuItem> region_options = new List<MenuItem>();
     foreach (RegionEnum region in RegionEnum.GetValues(typeof(RegionEnum)))
     {
-        RegionEnum captured_region = region;
         region_options.Add(new MenuItem($"{region}", null));
     }
 
@@ -262,6 +267,22 @@ RegionEnum ShowRegionOptions()
 void ShowUserMenu(User user)
 {
     List<MenuItem> user_menu_items = new List<MenuItem>();
+    user_menu_items.Add(new MenuItem("Profile", () =>
+    {
+        ColorizedPrint("Profile", ConsoleColor.DarkGray);
+        ColorizedPrint("------------------", ConsoleColor.DarkCyan);
+        ColorizedPrint($"{user.FirstName}", ConsoleColor.Gray);
+        ColorizedPrint($"{user.LastName}", ConsoleColor.Gray);
+        ColorizedPrint($"{user.Gender}", ConsoleColor.Gray);
+        ColorizedPrint($"{user.BirthDate}", ConsoleColor.Gray);
+        ColorizedPrint($"{user.Email}", ConsoleColor.Gray);
+        ColorizedPrint($"{user.PhoneNumber}", ConsoleColor.Gray);
+        ColorizedPrint($"{user.Region}", ConsoleColor.Gray);
+        ColorizedPrint("------------------", ConsoleColor.DarkCyan);
+        ColorizedPrint("\nPress any key to go back.");
+        Console.ReadKey(true);
+    }));
+
     user_menu_items.Add(new MenuItem("View my journal", () =>
     {
         ColorizedPrint("You can view your journal here");
@@ -429,7 +450,7 @@ static bool Validate(string personalNumber)
 {
     if (personalNumber.Length != 13)
     {
-        ColorizedPrint("Personal number must be in format YYYYMMDD-XXXX.", ConsoleColor.DarkRed);
+        ColorizedPrint("Personal number must be in format yyyyMMdd-XXXX.", ConsoleColor.DarkRed);
         return false;
     }
 
